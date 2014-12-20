@@ -44,5 +44,5 @@ Ces technologies ont été choisies pour leur aspect pratique et moderne. Elles 
 
 - HTML5, CSS3, _web-based client_
 - AngularJS, _MVC_
-- Less, _ pré-processeur CSS_
+- Less, _pré-processeur CSS_
 - Bootstrap, _responsive design_
