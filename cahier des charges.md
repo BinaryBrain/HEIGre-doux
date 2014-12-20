@@ -1,5 +1,5 @@
-Cahier des charges
-==================
+HEIGre-doux - Cahier des charges
+================================
 
 Ce document constitue le cahier des charges pour le projet du cours de base de donnée.
 
