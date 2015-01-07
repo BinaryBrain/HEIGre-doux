@@ -42,7 +42,16 @@ class Types(tag: Tag) extends Table[Type](tag, "types") {
   def * = (id, name) <> (Type.tupled, Type.unapply)
 }
 
-object Menus extends TableQuery(new Menus(_))
+object Menus extends TableQuery(new Menus(_)) {
+  def get(time: Timestamp)(implicit s: Session) = {
+    (Menus.filter(_.date === time)
+      join MenusAliments on (_.id === _.idMenu)
+      join Aliments on (_._2.idAliment === _.id)
+      join Types on (_._2.`type` === _.id)
+    ).map (t => (t._1._1._1, t._1._2, t._2)).run
+  }
+}
+
 object MenusAliments extends TableQuery(new MenusAliments(_))
 object Aliments extends TableQuery(new Aliments(_))
 object Types extends TableQuery(new Types(_))
