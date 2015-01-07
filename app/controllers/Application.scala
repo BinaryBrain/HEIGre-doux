@@ -35,8 +35,6 @@ object Application extends Controller {
         })
       }
 
-      println(menus)
-
       val json = menus map {
         menu => Json.obj(
           "id" -> menu._1.id,
