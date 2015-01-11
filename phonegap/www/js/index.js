@@ -36,13 +36,13 @@ App.controller('mainCtrl', function ($scope, $rootScope, $http) {
     var dailyMenus = [];
     
     for (var key in menus) {
-        var l = dailyMenus.push( { date: toFrenchDate(key) }, { menus: menus[key] });
+        var l = dailyMenus.push( { date: toFrenchDate(key), menus: menus[key] });
     }
 
     $scope.dailyMenus = dailyMenus;
 
     function toFrenchDate (date) {
-        return capFirst(moment(date).format("dddd (Do MMMM YYYY)"));
+        return capFirst(moment(date).format("dddd - Do MMMM YYYY"));
     }
 
     function menusArrayByDay (menus) {

@@ -6,7 +6,7 @@
         <meta name="msapplication-tap-highlight" content="no" />
         <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <link rel="stylesheet/less" type="text/css" href="less/index.less">
 
         <script src="js/lib/angular.min.js"></script>
         <script src="js/lib/moment.min.js"></script>
@@ -15,22 +15,28 @@
 
         <script src="js/ready.js"></script>
         <script src="js/index.js"></script>
+        
         <title>HEIGre-doux</title>
     </head>
     <body ng-controller="mainCtrl">
-        <h1>HEIGre-doux</h1>
-        <div id="deviceready" class="blink">
-            <p class="event listening">Connecting to Device</p>
-            <p class="event received">Device is Ready</p>
-        </div>
+        <div id="container">
+            <h1>HEIGre-doux</h1>
+            <div id="deviceready" class="blink">
+                <p class="event listening">Connecting to Device</p>
+                <p class="event received">Device is Ready</p>
+            </div>
 
-        <div id="days">
-            <div class="day" ng-repeat="d in dailyMenus">
-                {{ d.date }}
-                <div id="menus" ng-repeat="m in d.menus">
-                    <div>{{ m.frenchDate }}</div>
-                    <div class="aliment" ng-repeat="a in m.aliments">
-                        {{ a.name }} - {{ a.type.name }}
+
+            <div id="days">
+                <div class="day" ng-repeat="d in dailyMenus">
+                    <h3 class="title">{{ d.date }}</h3>
+                    <div id="menus">
+                        <div class="menu" ng-repeat="m in d.menus">
+                            {{ m.frenchDate }}
+                            <div class="aliment" ng-repeat="a in m.aliments">
+                                {{ a.name }} - {{ a.type.name }}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
