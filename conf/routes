@@ -3,12 +3,13 @@
 # ~~~~
 
 # Home page
-GET        /                                                  controllers.Application.index
-
-# Map static resources from the /public folder to the /assets URL path
-GET        /assets/*file                                      controllers.Assets.at(path="/public", file)
+GET        /                                                   controllers.Application.admin
+GET        /phonegap                                           controllers.Application.phonegap
 
 # RESTful API
-GET        /api/menus/$time<[0-9]{4}-[0-9]{2}-[0-9]{2}>       controllers.Application.getMenuByDate(time: String)
-GET        /api/menus/$id<[0-9]+>                             controllers.Application.getMenuById(id: Int)
-GET        /api/menus                                         controllers.Application.getTodayMenu
+GET        /api/menus/$time<[0-9]{4}-[0-9]{2}-[0-9]{2}>        controllers.Application.getMenuByDate(time: String)
+GET        /api/menus/$id<[0-9]+>                              controllers.Application.getMenuById(id: Int)
+GET        /api/menus                                          controllers.Application.getTodayMenu
+
+# Map static resources from the /public folder to the /assets URL path
+GET        /*file                                              controllers.Application.get(file)

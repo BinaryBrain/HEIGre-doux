@@ -1,15 +1,30 @@
 package controllers
 
+import java.nio.charset.StandardCharsets
+import java.nio.file.Files
+import java.nio.file.Paths
+
 import models._
 
 import play.api.libs.json._
 import play.api.mvc._
 import java.sql.Timestamp
 import java.time._
+import play.api.Play.current
 
 object Application extends Controller {
-  def index = Action {
+  def admin = Action {
     Ok(views.html.index())
+  }
+
+  def phonegap = Action {
+    val content = new String(Files.readAllBytes(Paths.get("phonegap/www/index.html")))
+    Ok(content).as(HTML)
+  }
+
+  def get(file: String) = Action {
+    val content = new String(Files.readAllBytes(Paths.get("phonegap/www/" + file)))
+    Ok(content).as(HTML)
   }
 
   def getTodayMenu: Action[AnyContent] = Action {
