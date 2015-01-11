@@ -8,6 +8,8 @@ GET        /phonegap                                           controllers.Appli
 
 # RESTful API
 GET        /api/menus/$time<[0-9]{4}-[0-9]{2}-[0-9]{2}>        controllers.Application.getMenuByDate(time: String)
+GET        /api/menus/$start<[0-9]{4}-[0-9]{2}-[0-9]{2}>/$end<[0-9]{4}-[0-9]{2}-[0-9]{2}>    controllers.Application.getMenuRange(start: String, end: String)
+
 GET        /api/menus/$id<[0-9]+>                              controllers.Application.getMenuById(id: Int)
 GET        /api/menus                                          controllers.Application.getTodayMenu
 

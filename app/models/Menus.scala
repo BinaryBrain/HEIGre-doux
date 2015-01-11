@@ -43,8 +43,9 @@ class Types(tag: Tag) extends Table[Type](tag, "types") {
 }
 
 object Menus extends TableQuery(new Menus(_)) {
-  def get(time: Timestamp)(implicit s: Session) = {
-    (Menus.filter(_.date === time)
+  def get(start: Timestamp, endOpt: Option[Timestamp] = None)(implicit s: Session) = {
+    val end = endOpt.getOrElse(start)
+    (Menus.filter(m => m.date >= start && m.date <= end)
       join MenusAliments on (_.id === _.idMenu)
       join Aliments on (_._2.idAliment === _.id)
       join Types on (_._2.`type` === _.id)

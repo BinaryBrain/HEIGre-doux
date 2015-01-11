@@ -37,11 +37,21 @@ object Application extends Controller {
     Ok(getMenu(new Timestamp(date.toEpochDay * TimeConstant.MS_PER_DAY)))
   }
 
+  def getMenuRange(startStr: String, endStr: String) = Action {
+    val startDate: LocalDate = LocalDate.parse(startStr)
+    val endDate: LocalDate = LocalDate.parse(endStr)
+
+    val start = new Timestamp(startDate.toEpochDay * TimeConstant.MS_PER_DAY)
+    val end = new Timestamp(endDate.toEpochDay * TimeConstant.MS_PER_DAY)
+
+    Ok(getMenu(start, Option(end)))
+  }
+
   def getMenuById(id: Int) = TODO
 
-  def getMenu(time: Timestamp): JsValue = {
+  def getMenu(start: Timestamp, end: Option[Timestamp] = None): JsValue = {
     DB.withSession { implicit session =>
-      val menusAliments = Menus.get(time)
+      val menusAliments = Menus.get(start, end)
       val menusMap = menusAliments.groupBy(_._1)
 
       val menus = menusMap map {
