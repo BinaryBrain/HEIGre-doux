@@ -17,29 +17,44 @@ App.controller('mainCtrl', function ($scope, $rootScope, $http) {
 
     moment.locale('fr');
 
-    var menus = [{ id: 3, date: "2015-01-08T01:00:00.00Z", aliments: [ { id: 1, name: "Cuisse de poulet", type: { id: 1, name: "Viande/Volaille" } } ] }, { id: 2, date: "2015-01-09T01:00:00.00Z", aliments: [ { id: 2, name: "Émincé de veau", type: { id: 1, name: "Viande/Volaille" } }, { id: 3, name: "Fruits", type: { id: 2, name: "Dessert" } } ] }, { id: 1, date: "2015-01-09T01:00:00.00Z", aliments: [ { id: 1, name: "Cuisse de poulet", type: { id: 1, name: "Viande/Volaille" } }, { id: 3, name: "Fruits", type: { id: 2, name: "Dessert" } } ] } ];
+    var dummyMenus = [{ id: 3, date: "2015-01-08T01:00:00.00Z", aliments: [ { id: 1, name: "Cuisse de poulet", type: { id: 1, name: "Viande/Volaille" } } ] }, { id: 2, date: "2015-01-09T01:00:00.00Z", aliments: [ { id: 2, name: "Émincé de veau", type: { id: 1, name: "Viande/Volaille" } }, { id: 3, name: "Fruits", type: { id: 2, name: "Dessert" } } ] }, { id: 1, date: "2015-01-09T01:00:00.00Z", aliments: [ { id: 1, name: "Cuisse de poulet", type: { id: 1, name: "Viande/Volaille" } }, { id: 3, name: "Fruits", type: { id: 2, name: "Dessert" } } ] } ];
 
-    /*
-        $http.get(API_URL + "/menus")
+    var menus = [];
+
+    var startDate = new Date();
+    var endDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + 7);
+    var startDateStr = dateToStr(startDate);
+    var endDateStr = dateToStr(endDate);
+
+    $http.get(API_URL + "/menus/" + startDateStr + "/" + endDateStr)
         .success(function (data) {
-            var menus = generateFrenchDate(data.menus);
-
-            $scope.menus = menus;
+            processMenus(data.menus);
         })
         .error(function (data, status, headers, config) {
             alert("Erreur de connexion. Impossible de récupérer les menus.");
-        });
-    */
+    });
 
-    menus = menusArrayByDay(menus);
+    function processMenus(menus) {
+        menus = menusArrayByDay(menus);
 
-    var dailyMenus = [];
-    
-    for (var key in menus) {
-        var l = dailyMenus.push( { date: toFrenchDate(key), menus: menus[key] });
+        var dailyMenus = [];
+        
+        for (var key in menus) {
+            var l = dailyMenus.push( { date: toFrenchDate(key), menus: menus[key] });
+        }
+
+        $scope.dailyMenus = dailyMenus;
     }
 
-    $scope.dailyMenus = dailyMenus;
+    function dateToStr(date) {
+        return date.getFullYear() + "-" + pad((date.getMonth()+1), 2) + "-" + pad(date.getDate(), 2);
+        
+        function pad(num, size) {
+            var s = num + "";
+            while (s.length < size) s = "0" + s;
+            return s;
+        }
+    }
 
     function toFrenchDate (date) {
         return capFirst(moment(date).format("dddd - Do MMMM YYYY"));
