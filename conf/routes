@@ -5,6 +5,7 @@
 # Home page
 GET        /                                                   controllers.Application.admin
 GET        /phonegap                                           controllers.Application.phonegap
+GET        /downloadMenus                                      controllers.Application.getMenus
 
 # RESTful API
 GET        /api/menus/$time<[0-9]{4}-[0-9]{2}-[0-9]{2}>        controllers.Application.getMenuByDate(time: String)

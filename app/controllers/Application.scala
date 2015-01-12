@@ -22,6 +22,29 @@ object Application extends Controller {
     Ok(content).as(HTML)
   }
 
+  def getMenus = Action {
+    val properties = new Properties()
+    val path = ""
+    val inputStream = getClass().getClassLoader().getRessourceAsStream(path)
+
+    properties.load(inputStream)
+ 
+    val url = properties.getProperty("url")
+    val user = properties.getProperty("user")
+    val password = properties.getProperty("password")
+    val domain = properties.getProperty("domain")
+    val menusDir = properties.getProperty("directory")
+
+    val menuDL = new MenuDownloader(user, password, url, domain)
+
+    menuDL.downloadDocx(menusDir + "menu0.docx", 0)
+    menuDL.downloadDocx(menusDir + "menu1.docx", 0)
+
+    val menus: List[List[Menu]] = MenuParser.parseMenusDocx(menusDir + "menus0.docx")
+
+    Ok("OK")
+  }
+
   def get(file: String) = Action {
     val content = new String(Files.readAllBytes(Paths.get("phonegap/www/" + file)))
     Ok(content).as(HTML)
