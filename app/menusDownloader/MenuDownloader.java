@@ -1,3 +1,5 @@
+package menusDownloader;
+
 import java.io.*;
 import java.net.Authenticator;
 import java.net.HttpURLConnection;
@@ -8,7 +10,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MenuDownloader {
-
     private String host;
     private String baseUrl;
 

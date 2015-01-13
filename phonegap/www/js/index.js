@@ -1,7 +1,7 @@
 'use strict';
 
 var App = angular.module('App', ['btford.phonegap.ready']);
-var API_URL = "http://10.192.94.46:9000/api";
+var API_URL = "http://localhost:9000/api";
 
 // Show complete error messages in console
 window.onerror = function (errorMsg, url, lineNumber, columnNumber, errorObject) {

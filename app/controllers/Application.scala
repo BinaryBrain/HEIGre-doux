@@ -1,10 +1,12 @@
 package controllers
 
-import java.nio.charset.StandardCharsets
+import java.io.FileInputStream
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.util.Properties
 
 import models._
+import menusDownloader._
 
 import play.api.libs.json._
 import play.api.mvc._
@@ -24,9 +26,8 @@ object Application extends Controller {
 
   def getMenus = Action {
     val properties = new Properties()
-    val path = "../../conf/config.properties"
-    val inputStream = getClass().getClassLoader().getRessourceAsStream(path)
-
+    val path = "conf/config.properties"
+    val inputStream = new FileInputStream(path)
     properties.load(inputStream)
  
     val url = properties.getProperty("url")
@@ -37,10 +38,10 @@ object Application extends Controller {
 
     val menuDL = new MenuDownloader(user, password, url, domain)
 
-    menuDL.downloadDocx(menusDir + "menu0.docx", 0)
-    menuDL.downloadDocx(menusDir + "menu1.docx", 1)
+    menuDL.downloadDocx(menusDir + "/menu0.docx", 0)
+    menuDL.downloadDocx(menusDir + "/menu1.docx", 1)
 
-    val menus: List[List[Menu]] = MenuParser.parseMenusDocx(menusDir + "menus0.docx")
+    val menus = MenuParser.parseMenusDocx(menusDir + "/menus0.docx")
 
     Ok("OK")
   }
