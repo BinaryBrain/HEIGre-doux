@@ -5,6 +5,8 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.Properties
 
+import scala.collection.JavaConversions._
+
 import models._
 import menusDownloader._
 
@@ -38,10 +40,21 @@ object Application extends Controller {
 
     val menuDL = new MenuDownloader(user, password, url, domain)
 
-    menuDL.downloadDocx(menusDir + "/menu0.docx", 0)
-    menuDL.downloadDocx(menusDir + "/menu1.docx", 1)
+    // menuDL.downloadDocx(menusDir + "/menu0.docx", 0)
+    // menuDL.downloadDocx(menusDir + "/menu1.docx", 1)
 
-    val menus = MenuParser.parseMenusDocx(menusDir + "/menus0.docx")
+    val menus = MenuParser.parseMenusDocx(menusDir + "/menu0.docx")
+/*
+    menus.map {
+      day => day.map {
+        _ => {
+          println(_)
+          _
+        }
+      }
+    } */
+
+    println(menus)
 
     Ok("OK")
   }

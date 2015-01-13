@@ -11,16 +11,19 @@ public class Menu {
     private String provenance;
     private String sauce;
     private String dessert;
-    private List<String> accompagnement;
+    private List<String> accompagnement = new ArrayList<>();
 
     public Menu(List<String> menu) {
-        entree = menu.remove(0);
-        dessert = menu.remove(menu.size() - 1);
+        entree = capFirst(menu.remove(0));
+        dessert = capFirst(menu.remove(menu.size() - 1));
         parseProvenance(menu);
-        viande = menu.remove(0);
+        viande = capFirst(menu.remove(0));
         parseSauce(menu);
-        sanityze(menu);
-        accompagnement = menu;
+        sanitize(menu);
+
+        for (String m : menu) {
+            accompagnement.add(capFirst(m));
+        }
     }
 
     private void parseProvenance(List<String> lines) {
@@ -43,7 +46,7 @@ public class Menu {
         }
     }
 
-    private void sanityze(List<String> lines) {
+    private void sanitize(List<String> lines) {
         String line;
         String regex = "\\(.*\\)";
 
@@ -62,20 +65,22 @@ public class Menu {
         if (lines.get(0).contains("«")) {
             String line = lines.remove(0);
             line = line.substring(line.indexOf("«")).replace("«", "").replace("»", "");
-            sauce = line.trim();
+            sauce = capFirst(line.trim());
         }
     }
 
-    public void print() {
-        System.out.println("entree: " + entree);
-        System.out.println("viande: " + viande);
-        System.out.println("provenance: " + provenance);
-        System.out.println("sauce: " + sauce);
-        System.out.println("dessert: " + dessert);
-        System.out.print("accompagnement: ");
-        for (String s : accompagnement) {
-            System.out.println(s);
-        }
+    private String capFirst(String str) {
+        str = str.toLowerCase();
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
+    public String toString() {
+        return "entree: " + entree +
+                ", viande: " + viande +
+                ", provenance: " + provenance +
+                ", sauce: " + sauce +
+                ", dessert: " + dessert +
+                ", accompagnement: " + accompagnement;
     }
 
     public String getEntree() {
