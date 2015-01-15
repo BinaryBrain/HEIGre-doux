@@ -28,13 +28,12 @@
 
 
             <div id="days">
-                <div class="day" ng-repeat="d in dailyMenus">
-                    <h3 class="title">{{ d.date }}</h3>
+                <div class="day" ng-repeat="d in dailyMenus | orderBy: 'date' ">
+                    <h3 class="title">{{ d.frenchDate }}</h3>
                     <div id="menus">
                         <div class="menu" ng-repeat="m in d.menus">
-                            {{ m.frenchDate }}
                             <div class="aliment" ng-repeat="a in m.aliments">
-                                {{ a.name }} - {{ a.type.name }}
+                                {{ a.name }} - {{ a.type.name }} - {{ a.last | momentAgo }}
                             </div>
                         </div>
                     </div>

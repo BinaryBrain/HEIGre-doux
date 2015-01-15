@@ -24,4 +24,5 @@ package object models {
   implicit val menusAlimentJsonFormat = Json.format[MenusAliment]
   implicit val alimentJsonFormat = Json.format[Aliment]
   implicit val typeJsonFormat = Json.format[Type]
+  // TODO same for Nutriments Tables
 }

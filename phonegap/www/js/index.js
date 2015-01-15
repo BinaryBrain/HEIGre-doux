@@ -21,7 +21,9 @@ App.controller('mainCtrl', function ($scope, $rootScope, $http) {
 
     var menus = [];
 
-    var startDate = new Date();
+    var today = new Date()
+    var shift = today.getDay();
+    var startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - shift);
     var endDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + 7);
     var startDateStr = dateToStr(startDate);
     var endDateStr = dateToStr(endDate);
@@ -40,7 +42,7 @@ App.controller('mainCtrl', function ($scope, $rootScope, $http) {
         var dailyMenus = [];
         
         for (var key in menus) {
-            var l = dailyMenus.push( { date: toFrenchDate(key), menus: menus[key] });
+            var l = dailyMenus.push( { date: key, frenchDate: toFrenchDate(key), menus: menus[key] });
         }
 
         $scope.dailyMenus = dailyMenus;
@@ -77,4 +79,10 @@ App.controller('mainCtrl', function ($scope, $rootScope, $http) {
     function capFirst (string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
+});
+
+App.filter('momentAgo', function () {
+  return function (date) {
+    return moment(date).fromNow();
+  };
 });

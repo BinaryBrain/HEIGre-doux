@@ -6,6 +6,7 @@ import java.nio.file.Paths
 import java.util.Properties
 
 import scala.collection.JavaConversions._
+import scala.slick.jdbc.StaticQuery.interpolation
 
 import models._
 import menusDownloader._
@@ -38,23 +39,33 @@ object Application extends Controller {
     val domain = properties.getProperty("domain")
     val menusDir = properties.getProperty("directory")
 
+    val today: LocalDate = LocalDate.now
+    val shift = today.getDayOfWeek.getValue - 1
+    val monday = today.toEpochDay - shift
+
     val menuDL = new MenuDownloader(user, password, url, domain)
 
-    // menuDL.downloadDocx(menusDir + "/menu0.docx", 0)
-    // menuDL.downloadDocx(menusDir + "/menu1.docx", 1)
+    val file = menusDir + "/menu-" + today.minusDays(shift) + ".docx"
 
-    val menus = MenuParser.parseMenusDocx(menusDir + "/menu0.docx")
-/*
-    menus.map {
-      day => day.map {
-        _ => {
-          println(_)
-          _
-        }
+    menuDL.downloadDocx(file, 0) // Orangeraie
+    // menuDL.downloadDocx(menusDir + "/menu1.docx", 1) // Palmeraie
+
+    // TODO avoid doubles
+
+    val menus = MenuParser.parseMenusDocx(file)
+
+    val menusByDay = menus.transpose.map(m => m.toList).toList
+
+    DB.withSession { implicit session =>
+      menusByDay.zipWithIndex foreach {
+        case (dailyMenus, index) =>
+          val date = new Timestamp((monday + index) * TimeConstant.MS_PER_DAY)
+
+          dailyMenus foreach {
+            m => Menus.add(date, m)
+          }
       }
-    } */
-
-    println(menus)
+    }
 
     Ok("OK")
   }
@@ -93,7 +104,7 @@ object Application extends Controller {
 
       val menus = menusMap map {
         menu => (menu._1, menu._2.map {
-          seq => (seq._2, seq._3)
+          seq => (seq._2, seq._3, seq._4)
         })
       }
 
@@ -103,9 +114,11 @@ object Application extends Controller {
           "date" -> menu._1.date,
           "aliments" -> menu._2.map {
             t => Json.obj(
-              "id" -> t._1.id,
+              "id" -> t._2.id,
               "name" -> t._1.name,
-              "type" -> t._2
+              "occurrence" -> t._2.occurrence,
+              "last" -> t._2.last,
+              "type" -> t._3
             )
           }
         )

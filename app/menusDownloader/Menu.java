@@ -6,23 +6,30 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Menu {
+    /*
     private String entree;
     private String viande;
-    private String provenance;
     private String sauce;
     private String dessert;
     private List<String> accompagnement = new ArrayList<>();
+    */
+
+
+    private String provenance;
+    private List<Aliment> aliments = new ArrayList<>();
 
     public Menu(List<String> menu) {
-        entree = capFirst(menu.remove(0));
-        dessert = capFirst(menu.remove(menu.size() - 1));
+        aliments.add(new Aliment(capFirst(menu.remove(0)), Type.Entree));
+        aliments.add(new Aliment(capFirst(menu.remove(menu.size() - 1)), Type.Dessert));
+
         parseProvenance(menu);
-        viande = capFirst(menu.remove(0));
+        aliments.add(new Aliment(capFirst(menu.remove(0)), Type.Viande));
+
         parseSauce(menu);
         sanitize(menu);
 
         for (String m : menu) {
-            accompagnement.add(capFirst(m));
+            aliments.add(new Aliment(capFirst(m), Type.Accompagnement));
         }
     }
 
@@ -65,7 +72,7 @@ public class Menu {
         if (lines.get(0).contains("«")) {
             String line = lines.remove(0);
             line = line.substring(line.indexOf("«")).replace("«", "").replace("»", "");
-            sauce = capFirst(line.trim());
+            aliments.add(new Aliment(capFirst(line.trim()), Type.Sauce));
         }
     }
 
@@ -75,35 +82,15 @@ public class Menu {
     }
 
     public String toString() {
-        return "entree: " + entree +
-                ", viande: " + viande +
-                ", provenance: " + provenance +
-                ", sauce: " + sauce +
-                ", dessert: " + dessert +
-                ", accompagnement: " + accompagnement;
+        return "Menu: { aliments: " + aliments +
+                ", provenance: " + provenance + "}";
     }
 
-    public String getEntree() {
-        return entree;
-    }
-
-    public String getViande() {
-        return viande;
+    public List<Aliment> getAliments() {
+        return aliments;
     }
 
     public String getProvenance() {
         return provenance;
-    }
-
-    public String getSauce() {
-        return sauce;
-    }
-
-    public String getDessert() {
-        return dessert;
-    }
-
-    public List<String> getAccompagnement() {
-        return new ArrayList<String>(accompagnement);
     }
 }
