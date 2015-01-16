@@ -1,11 +1,14 @@
 package controllers
 
-import java.io.FileInputStream
+import java.io.{File, FileInputStream}
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.Properties
 import java.time._
 import java.sql.Timestamp
+import javax.activation.MimetypesFileTypeMap
+
+import play.api.http.MimeTypes
 
 import scala.collection.JavaConversions._
 import scala.slick.jdbc.StaticQuery.interpolation
@@ -75,8 +78,12 @@ object Application extends Controller {
   }
 
   def get(file: String) = Action {
-    val content = new String(Files.readAllBytes(Paths.get("phonegap/www/" + file)))
-    Ok(content).as(HTML)
+    val source = Paths.get("phonegap/www/" + file)
+    val mime = Files.probeContentType(source)
+
+    val content = new String(Files.readAllBytes(source))
+
+    Ok(content).as(withCharset(mime))
   }
 
   def getTodayMenu: Action[AnyContent] = Action {
