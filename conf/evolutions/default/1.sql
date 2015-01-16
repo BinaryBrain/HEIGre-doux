@@ -10,10 +10,10 @@ create table `nutriments_aliments` (`ID` INTEGER NOT NULL AUTO_INCREMENT PRIMARY
 create table `nutriments_names` (`ID` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,`name` VARCHAR(254) NOT NULL);
 create table `nutriments_values` (`id_nutriments_aliment` INTEGER NOT NULL,`id_nutriments_name` INTEGER NOT NULL,`value` DOUBLE NOT NULL,`protein_unit` VARCHAR(254) NOT NULL,`matrix_unit` VARCHAR(254) NOT NULL,`value_type` VARCHAR(254) NOT NULL);
 create table `types` (`id` INTEGER NOT NULL PRIMARY KEY,`name` VARCHAR(254) NOT NULL);
-alter table `menus_aliments` add constraint `menusaliments_aliments_fk` foreign key(`id_menu`) references `aliments`(`id`) on update CASCADE on delete RESTRICT;
-alter table `menus_aliments` add constraint `menusaliments_menu_fk` foreign key(`id_menu`) references `menus`(`id`) on update CASCADE on delete RESTRICT;
-alter table `menus_aliments` add constraint `menusaliments_nutriments_fk` foreign key(`id_menu`) references `nutriments_aliments`(`ID`) on update CASCADE on delete RESTRICT;
-alter table `menus_aliments` add constraint `menusaliments_type_fk` foreign key(`type`) references `types`(`id`) on update CASCADE on delete RESTRICT;
+alter table `menus_aliments` add constraint `menusaliments_aliments_fk` foreign key(`id_menu`) references `aliments`(`id`) on update CASCADE on delete CASCADE;
+alter table `menus_aliments` add constraint `menusaliments_menu_fk` foreign key(`id_menu`) references `menus`(`id`) on update CASCADE on delete CASCADE;
+alter table `menus_aliments` add constraint `menusaliments_nutriments_fk` foreign key(`id_menu`) references `nutriments_aliments`(`ID`) on update CASCADE on delete CASCADE;
+alter table `menus_aliments` add constraint `menusaliments_type_fk` foreign key(`type`) references `types`(`id`) on update CASCADE on delete CASCADE;
 alter table `nutriments_values` add constraint `nutrimentsvalues_nutrimentsaliments_fk` foreign key(`id_nutriments_aliment`) references `nutriments_aliments`(`ID`) on update CASCADE on delete CASCADE;
 alter table `nutriments_values` add constraint `nutrimentsvalues_nutrimentsnames_fk` foreign key(`id_nutriments_name`) references `nutriments_names`(`ID`) on update CASCADE on delete CASCADE;
 

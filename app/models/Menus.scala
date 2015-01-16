@@ -28,10 +28,10 @@ class MenusAliments(tag: Tag) extends Table[MenusAliment](tag, "menus_aliments")
 
   def * = (idMenu, idAliment, name, `type`, nutriment) <> (MenusAliment.tupled, MenusAliment.unapply)
 
-  def menuFK = foreignKey("menusaliments_menu_fk", idMenu, Menus)(_.id, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-  def alimentFK = foreignKey("menusaliments_aliments_fk", idMenu, Aliments)(_.id, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-  def nutrimentFK = foreignKey("menusaliments_nutriments_fk", idMenu, NutrimentsAliments)(_.id, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
-  def typeFK = foreignKey("menusaliments_type_fk", `type`, Types)(_.id, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Restrict)
+  def menuFK = foreignKey("menusaliments_menu_fk", idMenu, Menus)(_.id, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Cascade)
+  def alimentFK = foreignKey("menusaliments_aliments_fk", idMenu, Aliments)(_.id, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Cascade)
+  def nutrimentFK = foreignKey("menusaliments_nutriments_fk", idMenu, NutrimentsAliments)(_.id, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Cascade)
+  def typeFK = foreignKey("menusaliments_type_fk", `type`, Types)(_.id, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Cascade)
 }
 
 class Aliments(tag: Tag) extends Table[Aliment](tag, "aliments") {
