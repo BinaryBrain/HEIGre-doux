@@ -1,6 +1,6 @@
 'use strict';
 
-var App = angular.module('App', ['btford.phonegap.ready']);
+var App = angular.module('App', ['ui.bootstrap', 'btford.phonegap.ready']);
 var API_URL = "http://localhost:9000/api";
 
 // Show complete error messages in console
@@ -84,5 +84,22 @@ App.controller('mainCtrl', function ($scope, $rootScope, $http) {
 App.filter('momentAgo', function () {
   return function (date) {
     return moment(date).fromNow();
+  };
+});
+
+
+App.controller('AccordionDemoCtrl', function ($scope) {
+  $scope.oneAtATime = true;
+
+  $scope.items = ['Item 1', 'Item 2', 'Item 3'];
+
+  $scope.addItem = function() {
+    var newItemNo = $scope.items.length + 1;
+    $scope.items.push('Item ' + newItemNo);
+  };
+
+  $scope.status = {
+    isFirstOpen: true,
+    isFirstDisabled: false
   };
 });
