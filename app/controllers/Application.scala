@@ -4,18 +4,20 @@ import java.io.FileInputStream
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.Properties
+import java.time._
+import java.sql.Timestamp
 
 import scala.collection.JavaConversions._
 import scala.slick.jdbc.StaticQuery.interpolation
-
-import models._
-import menusDownloader._
+import scala.collection.JavaConversions._
 
 import play.api.libs.json._
 import play.api.mvc._
-import java.sql.Timestamp
-import java.time._
 import play.api.Play.current
+import play.api.db.slick.Config.driver.simple._
+
+import models._
+import menusDownloader._
 
 object Application extends Controller {
   def admin = Action {
@@ -47,27 +49,29 @@ object Application extends Controller {
 
     val file = menusDir + "/menu-" + today.minusDays(shift) + ".docx"
 
-    menuDL.downloadDocx(file, 0) // Orangeraie
-    // menuDL.downloadDocx(menusDir + "/menu1.docx", 1) // Palmeraie
-
-    // TODO avoid doubles
-
-    val menus = MenuParser.parseMenusDocx(file)
-
-    val menusByDay = menus.transpose.map(m => m.toList).toList
-
     DB.withSession { implicit session =>
-      menusByDay.zipWithIndex foreach {
-        case (dailyMenus, index) =>
-          val date = new Timestamp((monday + index) * TimeConstant.MS_PER_DAY)
+      if (models.Menus.filter(_.date === new Timestamp(monday * TimeConstant.MS_PER_DAY)).exists.run) {
+        Ok("Nothing done.")
+      } else {
+        menuDL.downloadDocx(file, 0) // Orangeraie
+        // menuDL.downloadDocx(menusDir + "/menu1.docx", 1) // Palmeraie
 
-          dailyMenus foreach {
-            m => Menus.add(date, m)
-          }
+        val menus = MenuParser.parseMenusDocx(file)
+
+        val menusByDay = menus.transpose.map(m => m.toList).toList
+
+        menusByDay.zipWithIndex foreach {
+          case (dailyMenus, index) =>
+            val date = new Timestamp((monday + index) * TimeConstant.MS_PER_DAY)
+
+            dailyMenus foreach {
+              m => Menus.add(date, m)
+            }
+        }
+
+        Ok("OK")
       }
     }
-
-    Ok("OK")
   }
 
   def get(file: String) = Action {
