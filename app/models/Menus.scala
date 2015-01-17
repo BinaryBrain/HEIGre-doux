@@ -37,10 +37,12 @@ class MenusAliments(tag: Tag) extends Table[MenusAliment](tag, "menus_aliments")
 class Aliments(tag: Tag) extends Table[Aliment](tag, "aliments") {
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
   def name = column[String]("name")
-  def occurrence = column[Int]("occurrence")
+  def occurrence = column[Int]("occurrence", O.Default(0))
   def last = column[Timestamp]("last")
 
   def * = (id, name, occurrence, last) <> (Aliment.tupled, Aliment.unapply)
+
+  def nameIndex = index("name_index", (name), unique = true)
 }
 
 class Types(tag: Tag) extends Table[Type](tag, "types") {
