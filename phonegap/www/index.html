@@ -6,6 +6,7 @@
         <meta name="msapplication-tap-highlight" content="no" />
         <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet/less" href="less/index.less">
 
@@ -34,7 +35,7 @@
                         <div id="menus">
                             <div class="menu" ng-repeat="m in d.menus">
                                 <div class="aliment" ng-repeat="a in m.aliments | orderBy: 'type.id'">
-                                    {{ a.name }} - {{ a.type.name }} - {{ a.last | momentAgo }}
+                                    {{ a.name }} - {{ a.last | momentAgo }}
                                 </div>
                             </div>
                         </div>

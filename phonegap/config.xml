@@ -4,7 +4,7 @@
     <description>
         HEIG-VD's menus, in your pocket.
     </description>
-    <author email="support@phonegap.com" href="http://phonegap.com">
+    <author email="sacha.bron@copperflake.com" href="http://phonegap.com">
         Sacha Bron, Léonard Berney
     </author>
     <content src="index.html" />
@@ -12,7 +12,7 @@
     <preference name="phonegap-version" value="3.5.0" />
     <preference name="orientation" value="default" />
     <preference name="target-device" value="universal" />
-    <preference name="fullscreen" value="true" />
+    <preference name="fullscreen" value="false" />
     <preference name="webviewbounce" value="true" />
     <preference name="prerendered-icon" value="true" />
     <preference name="stay-in-webview" value="false" />
