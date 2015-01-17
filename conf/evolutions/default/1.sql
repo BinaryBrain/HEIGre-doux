@@ -5,7 +5,7 @@
 
 create table `aliments` (`id` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,`name` VARCHAR(254) NOT NULL,`occurrence` INTEGER DEFAULT 0 NOT NULL,`last` TIMESTAMP NOT NULL);
 create unique index `name_index` on `aliments` (`name`);
-create table `menus_aliments` (`id_menu` INTEGER NOT NULL,`id_aliment` INTEGER NOT NULL,`name` VARCHAR(254) NOT NULL,`type` INTEGER NOT NULL,`nutriment` INTEGER);
+create table `menus_aliments` (`id` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,`id_menu` INTEGER NOT NULL,`id_aliment` INTEGER NOT NULL,`name` VARCHAR(254) NOT NULL,`type` INTEGER NOT NULL,`nutriment` INTEGER);
 create table `menus` (`id` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,`date` TIMESTAMP NOT NULL);
 create table `nutriments_aliments` (`id` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,`name_F` VARCHAR(254) NOT NULL,`category_F` VARCHAR(254));
 create table `nutriments_names` (`id` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,`name` VARCHAR(254) NOT NULL);

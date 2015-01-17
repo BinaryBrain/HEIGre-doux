@@ -142,6 +142,29 @@ object Application extends Controller {
       Json.obj("menus" -> json)
     }
   }
+
+  def getNutrimentsForId(id: Int) = Action {
+    DB.withSession { implicit session =>
+      val nutriments = MenusAliments.getNutriments(id).groupBy(_._1)
+
+      val json = nutriments map {
+        aliment => Json.obj(
+          "name" -> aliment._1.name_F,
+          "values" -> aliment._2.map {
+            n => Json.obj(
+              "name" -> n._2.name,
+              "value" -> n._3.value,
+              "unit" -> n._3.unit,
+              "matrix-unit" -> n._3.matrix,
+              "value-type" -> n._3.valueType
+            )
+          }
+        )
+      }
+
+      Ok(Json.obj("nutriments" -> json))
+    }
+  }
 }
 
 object TimeConstant {
