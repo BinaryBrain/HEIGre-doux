@@ -27,13 +27,14 @@ public class MenuDownloader {
     }
 
     public void downloadDocx(String fileName, int number) throws IOException {
-        FileOutputStream fos = new FileOutputStream(fileName, false);
         byte[] buffer = new byte[1024];
         int read;
 
         openConnection(getMenuUrls()[number * 2]); //WOW so hardcore
 
         InputStream stream = connection.getInputStream();
+        FileOutputStream fos = new FileOutputStream(fileName, false);
+
         while ((read = stream.read(buffer)) != -1) {
             fos.write(buffer, 0, read);
         }

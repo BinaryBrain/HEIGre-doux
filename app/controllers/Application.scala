@@ -56,8 +56,12 @@ object Application extends Controller {
       if (models.Menus.filter(_.date === new Timestamp(monday * TimeConstant.MS_PER_DAY)).exists.run) {
         Ok("Nothing done.")
       } else {
-        menuDL.downloadDocx(file, 0) // Orangeraie
-        // menuDL.downloadDocx(menusDir + "/menu1.docx", 1) // Palmeraie
+        try {
+          menuDL.downloadDocx(file, 0) // Orangeraie
+          // menuDL.downloadDocx(menusDir + "/menu1.docx", 1) // Palmeraie
+        } catch {
+          case e: Exception => println("Error while downloading menus")
+        }
 
         val menus = MenuParser.parseMenusDocx(file)
 
