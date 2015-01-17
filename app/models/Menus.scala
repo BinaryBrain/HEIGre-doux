@@ -29,8 +29,8 @@ class MenusAliments(tag: Tag) extends Table[MenusAliment](tag, "menus_aliments")
   def * = (idMenu, idAliment, name, `type`, nutriment) <> (MenusAliment.tupled, MenusAliment.unapply)
 
   def menuFK = foreignKey("menusaliments_menu_fk", idMenu, Menus)(_.id, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Cascade)
-  def alimentFK = foreignKey("menusaliments_aliments_fk", idMenu, Aliments)(_.id, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Cascade)
-  def nutrimentFK = foreignKey("menusaliments_nutriments_fk", idMenu, NutrimentsAliments)(_.id, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Cascade)
+  def alimentFK = foreignKey("menusaliments_aliments_fk", idAliment, Aliments)(_.id, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Cascade)
+  def nutrimentFK = foreignKey("menusaliments_nutriments_fk", nutriment, NutrimentsAliments)(_.id, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Cascade)
   def typeFK = foreignKey("menusaliments_type_fk", `type`, Types)(_.id, onUpdate=ForeignKeyAction.Cascade, onDelete=ForeignKeyAction.Cascade)
 }
 
@@ -42,7 +42,7 @@ class Aliments(tag: Tag) extends Table[Aliment](tag, "aliments") {
 
   def * = (id, name, occurrence, last) <> (Aliment.tupled, Aliment.unapply)
 
-  def nameIndex = index("name_index", (name), unique = true)
+  def nameIndex = index("name_index", name, unique = true)
 }
 
 class Types(tag: Tag) extends Table[Type](tag, "types") {
@@ -66,7 +66,7 @@ object Menus extends TableQuery(new Menus(_)) {
     val mid = (Menus returning Menus.map(_.id)) += Menu(0, date)
 
     // TODO Get the corresponding Aliment and NutrimentAliment
-    val aid = (Aliments returning Aliments.map(_.id)) += Aliment(0, "dummy", 1, date)
+    val aid = (Aliments returning Aliments.map(_.id)) += Aliment(0, "dummy"+Math.random(), 1, date)
     val nid = (NutrimentsAliments returning NutrimentsAliments.map(_.id)) += NutrimentsAliment(0, "dummy", Option("dummy"))
 
     // TODO Multiple Insertion
@@ -74,6 +74,8 @@ object Menus extends TableQuery(new Menus(_)) {
       a => {
         // TODO Update Aliment (via Trigger?)
         val t = Types !+= Type(a.getType.ordinal, a.getType.name)
+
+        println("NID: " + nid)
 
         MenusAliments += MenusAliment(mid, aid, a.getName, t.id, Option(nid))
       }
