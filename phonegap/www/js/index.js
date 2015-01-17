@@ -21,12 +21,14 @@ App.controller('mainCtrl', function ($scope, $rootScope, $http) {
 
     var menus = [];
 
-    var today = new Date()
+    var today = new Date();
     var shift = today.getDay();
     var startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - shift);
     var endDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + 7);
     var startDateStr = dateToStr(startDate);
     var endDateStr = dateToStr(endDate);
+
+    $scope.today = today;
 
     $http.get(API_URL + "/menus/" + startDateStr + "/" + endDateStr)
         .success(function (data) {
@@ -42,7 +44,8 @@ App.controller('mainCtrl', function ($scope, $rootScope, $http) {
         var dailyMenus = [];
         
         for (var key in menus) {
-            var l = dailyMenus.push( { date: key, frenchDate: toFrenchDate(key), menus: menus[key] });
+            var isToday = toFrenchDate(key) == toFrenchDate(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
+            var l = dailyMenus.push({ date: key, frenchDate: toFrenchDate(key), menus: menus[key], isOpen: isToday });
         }
 
         $scope.dailyMenus = dailyMenus;
@@ -58,11 +61,11 @@ App.controller('mainCtrl', function ($scope, $rootScope, $http) {
         }
     }
 
-    function toFrenchDate (date) {
+    function toFrenchDate(date) {
         return capFirst(moment(date).format("dddd - Do MMMM YYYY"));
     }
 
-    function menusArrayByDay (menus) {
+    function menusArrayByDay(menus) {
         var arr = {};
 
         for (var i = 0, l = menus.length; i < l; i++) {
@@ -76,7 +79,7 @@ App.controller('mainCtrl', function ($scope, $rootScope, $http) {
         return arr;
     }
 
-    function capFirst (string) {
+    function capFirst(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 });
@@ -90,16 +93,4 @@ App.filter('momentAgo', function () {
 
 App.controller('AccordionDemoCtrl', function ($scope) {
   $scope.oneAtATime = true;
-
-  $scope.items = ['Item 1', 'Item 2', 'Item 3'];
-
-  $scope.addItem = function() {
-    var newItemNo = $scope.items.length + 1;
-    $scope.items.push('Item ' + newItemNo);
-  };
-
-  $scope.status = {
-    isFirstOpen: true,
-    isFirstDisabled: false
-  };
 });

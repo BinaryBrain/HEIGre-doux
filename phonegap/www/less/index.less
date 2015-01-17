@@ -19,14 +19,16 @@ html, body {
 			margin-bottom: 10px;
 		}
 
-		.title, .menu {
+		.menu {
 			padding: 10px;
 		}
 
 		#menus {
 			.menu {
-				border-top: 1px solid black;
-
+				&:not(:first-child) {
+					border-top: 1px solid black;
+				}
+				
 				.aliment {
 				}
 			}
