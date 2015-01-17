@@ -28,13 +28,12 @@
                 <p class="event received">Device is Ready</p>
             </div>
 
-
             <div id="days" ng-controller="AccordionDemoCtrl">
                 <accordion close-others="oneAtATime">
                     <accordion-group class="day" ng-repeat="d in dailyMenus | orderBy: 'date'" heading="{{ d.frenchDate }}" is-open="d.isOpen">
                         <div id="menus">
                             <div class="menu" ng-repeat="m in d.menus">
-                                <div class="aliment" ng-repeat="a in m.aliments">
+                                <div class="aliment" ng-repeat="a in m.aliments | orderBy: 'type.id'">
                                     {{ a.name }} - {{ a.type.name }} - {{ a.last | momentAgo }}
                                 </div>
                             </div>

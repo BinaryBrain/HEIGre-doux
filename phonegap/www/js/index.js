@@ -17,8 +17,6 @@ App.controller('mainCtrl', function ($scope, $rootScope, $http) {
 
     moment.locale('fr');
 
-    var dummyMenus = [{ id: 3, date: "2015-01-08T01:00:00.00Z", aliments: [ { id: 1, name: "Cuisse de poulet", type: { id: 1, name: "Viande/Volaille" } } ] }, { id: 2, date: "2015-01-09T01:00:00.00Z", aliments: [ { id: 2, name: "Émincé de veau", type: { id: 1, name: "Viande/Volaille" } }, { id: 3, name: "Fruits", type: { id: 2, name: "Dessert" } } ] }, { id: 1, date: "2015-01-09T01:00:00.00Z", aliments: [ { id: 1, name: "Cuisse de poulet", type: { id: 1, name: "Viande/Volaille" } }, { id: 3, name: "Fruits", type: { id: 2, name: "Dessert" } } ] } ];
-
     var menus = [];
 
     var today = new Date();
