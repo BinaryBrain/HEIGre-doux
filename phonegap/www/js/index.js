@@ -2,7 +2,7 @@
 
 var App = angular.module('App', ['ui.bootstrap', 'btford.phonegap.ready']);
 var API_URL = "http://localhost:9000/api";
-API_URL = "http://192.168.1.55:9000/api";
+// API_URL = "http://192.168.1.55:9000/api";
 
 // Show complete error messages in console
 window.onerror = function (errorMsg, url, lineNumber, columnNumber, errorObject) {
@@ -14,14 +14,15 @@ window.onerror = function (errorMsg, url, lineNumber, columnNumber, errorObject)
 var s;
 
 App.controller('mainCtrl', function ($scope, $rootScope, $http) {
-    s = $scope;
-
     moment.locale('fr');
 
     var menus = [];
 
     var today = new Date();
     var shift = today.getDay();
+    if (shift === 0) {
+        shift = 7;
+    }
     var startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - shift);
     var endDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + 7);
     var startDateStr = dateToStr(startDate);
@@ -50,20 +51,6 @@ App.controller('mainCtrl', function ($scope, $rootScope, $http) {
         $scope.dailyMenus = dailyMenus;
     }
 
-    function dateToStr(date) {
-        return date.getFullYear() + "-" + pad((date.getMonth()+1), 2) + "-" + pad(date.getDate(), 2);
-        
-        function pad(num, size) {
-            var s = num + "";
-            while (s.length < size) s = "0" + s;
-            return s;
-        }
-    }
-
-    function toFrenchDate(date) {
-        return capFirst(moment(date).format("dddd - Do MMMM YYYY"));
-    }
-
     function menusArrayByDay(menus) {
         var arr = {};
 
@@ -78,9 +65,19 @@ App.controller('mainCtrl', function ($scope, $rootScope, $http) {
         return arr;
     }
 
-    function capFirst(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
+    $scope.nutriments = []
+
+    $scope.getNutriments = function (id, cb) {
+        $http.get(API_URL + "/nutriments/" + id)
+            .success(function (data) {
+                $scope.nutriments = data.nutriments;
+                cb(data.nutriments)
+            })
+            .error(function (data, status, headers, config) {
+                alert("Erreur de connexion. Impossible de récupérer les nutriments.");
+            });
     }
+
 });
 
 App.filter('momentAgo', function () {
@@ -90,6 +87,67 @@ App.filter('momentAgo', function () {
 });
 
 
-App.controller('AccordionDemoCtrl', function ($scope) {
+App.controller('AccordionCtrl', function ($scope) {
   $scope.oneAtATime = true;
 });
+
+function dateToStr(date) {
+    return date.getFullYear() + "-" + pad((date.getMonth()+1), 2) + "-" + pad(date.getDate(), 2);
+    
+    function pad(num, size) {
+        var s = num + "";
+        while (s.length < size) s = "0" + s;
+        return s;
+    }
+}
+
+function toFrenchDate(date) {
+    return capFirst(moment(date).format("dddd - Do MMMM YYYY"));
+}
+
+function capFirst(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+App.controller('nutrimentsCtrl', function ($scope, $modal) {
+    $scope.open = function (id) {
+        var modalInstance = $modal.open({
+            templateUrl: 'nutrimentsContent.html',
+            controller: 'nutrimentsInstanceCtrl',
+            resolve: {
+                id: function () {
+                    return id;
+                },
+                getNutriments: function () {
+                    return $scope.getNutriments;
+                }
+            }
+        });
+
+        modalInstance.result.then(function () {
+            console.log("closed")
+        });
+    };
+});
+
+App.controller('nutrimentsInstanceCtrl', ['$scope', '$modalInstance', 'id', 'getNutriments', function ($scope, $modalInstance, id, getNutriments) {
+    $scope.nutriments = [];
+    
+    getNutriments(id, function (data) {
+        for (var i = 0, l = data.length; i < l; i++) {
+            for (var j = 0, k = data[i].values.length; j < k; j++) {
+                var n = data[i].values[j];
+                var res = n['matrix-unit'].match(/$per\s*(\w*)\s*(\w*)\s*.*/); // TODO test and use this
+                // var unit = res[2];
+                // var per = res[1];
+                n.formattedValue = n.value /*+ unit + ' pour ' + n['matrix-unit'] + unit*/;
+            }
+        }
+
+        $scope.nutriments = data;
+    })
+
+    $scope.ok = function () {
+        $modalInstance.close();
+    };
+}]);

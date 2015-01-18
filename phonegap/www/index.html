@@ -24,23 +24,47 @@
     <body ng-controller="mainCtrl">
         <div id="container">
             <h1>HEIGre-doux</h1>
-            <div id="deviceready" class="blink">
+            <!--<div id="deviceready" class="blink">
                 <p class="event listening">Connecting to Device</p>
                 <p class="event received">Device is Ready</p>
-            </div>
-
-            <div id="days" ng-controller="AccordionDemoCtrl">
-                <accordion close-others="oneAtATime">
-                    <accordion-group class="day" ng-repeat="d in dailyMenus | orderBy: 'date'" heading="{{ d.frenchDate }}" is-open="d.isOpen">
-                        <div id="menus">
-                            <div class="menu" ng-repeat="m in d.menus">
-                                <div class="aliment" ng-repeat="a in m.aliments | orderBy: 'type.id'">
-                                    {{ a.name }} - {{ a.last | momentAgo }}
+            </div>-->
+            <div ng-controller="nutrimentsCtrl">
+                <div id="days" ng-controller="AccordionCtrl">
+                    <accordion close-others="oneAtATime">
+                        <accordion-group class="day" ng-repeat="d in dailyMenus | orderBy: 'date'" heading="{{ d.frenchDate }}" is-open="d.isOpen">
+                            <div id="menus">
+                                <div class="menu" ng-repeat="m in d.menus">
+                                    <div id="votes"></div>
+                                    <div id="aliments">
+                                        <div href="#" class="aliment" ng-repeat="a in m.aliments | orderBy: 'type.id'">
+                                            <a ng-click="open(a.id)" ng-if="a.nutriments"><span ng-if="a.type.name == 'Sauce'">Sauce: </span>{{ a.name }}</a>
+                                            <span ng-if="!a.nutriments"><span ng-if="a.type.name == 'Sauce'">Sauce: </span>{{ a.name }}</span>
+                                            <small>(dernière fois: {{ a.last | momentAgo }})</small>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                        </accordion-group>
+                    </accordion>
+                </div>
+
+                <script type="text/ng-template" id="nutrimentsContent.html">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Nutriments</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div ng-repeat="a in nutriments">
+                            <div>{{ a.name }}</div>
+                            <div ng-repeat="n in a.values">
+                                {{ n.name }}: {{ n.formattedValue }}
+                            </div>
+                            <code>{{ a | json }}</code>
                         </div>
-                    </accordion-group>
-                </accordion>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" ng-click="ok()">OK</button>
+                    </div>
+                </script>
             </div>
         </div>
     </body>

@@ -129,11 +129,12 @@ object Application extends Controller {
           "date" -> menu._1.date,
           "aliments" -> menu._2.map {
             t => Json.obj(
-              "id" -> t._2.id,
+              "id" -> t._1.id,
               "name" -> t._1.name,
               "occurrence" -> t._2.occurrence,
               "last" -> t._2.last,
-              "type" -> t._3
+              "type" -> t._3,
+              "nutriments" -> t._1.nutriment.isDefined
             )
           }
         )
