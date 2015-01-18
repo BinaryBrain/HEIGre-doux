@@ -32,3 +32,12 @@ drop temporary table tmp;
 
 end^^
 delimiter ;
+
+delimiter ^^
+create trigger incrementAliment before insert on menus_aliments for each row
+begin
+	update aliments
+	set occurrence = occurrence + 1
+	where id = new.id_aliment;
+end;^^
+delimiter ;
