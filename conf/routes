@@ -5,6 +5,7 @@
 # Home page
 GET        /                                                                                     controllers.Application.admin
 GET        /phonegap                                                                             controllers.Application.phonegap
+GET        /admin                                                                                controllers.Application.admin
 GET        /downloadMenus                                                                        controllers.Application.getMenus
 
 # RESTful API

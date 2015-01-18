@@ -24,7 +24,8 @@ import menusDownloader._
 
 object Application extends Controller {
   def admin = Action {
-    Ok(views.html.index())
+    val content = new String(Files.readAllBytes(Paths.get("phonegap/www/admin.html")))
+    Ok(content).as(HTML)
   }
 
   def phonegap = Action {
@@ -134,7 +135,7 @@ object Application extends Controller {
               "occurrence" -> t._2.occurrence,
               "last" -> t._2.last,
               "type" -> t._3,
-              "nutriments" -> t._1.nutriment.isDefined
+              "nutriments" -> t._1.nutriment
             )
           }
         )

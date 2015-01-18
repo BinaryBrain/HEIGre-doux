@@ -37,8 +37,8 @@
                                     <div id="votes"></div>
                                     <div id="aliments">
                                         <div href="#" class="aliment" ng-repeat="a in m.aliments | orderBy: 'type.id'">
-                                            <a ng-click="open(a.id)" ng-if="a.nutriments"><span ng-if="a.type.name == 'Sauce'">Sauce: </span>{{ a.name }}</a>
-                                            <span ng-if="!a.nutriments"><span ng-if="a.type.name == 'Sauce'">Sauce: </span>{{ a.name }}</span>
+                                            <a ng-click="open(a.id)" ng-if="a.nutriment"><span ng-if="a.type.name == 'Sauce'">Sauce: </span>{{ a.name }}</a>
+                                            <span ng-if="!a.nutriment"><span ng-if="a.type.name == 'Sauce'">Sauce: </span>{{ a.name }}</span>
                                             <small>(dernière fois: {{ a.last | momentAgo }})</small>
                                         </div>
                                     </div>
