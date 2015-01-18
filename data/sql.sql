@@ -1,4 +1,4 @@
-alter table aliments fulltext(name);
+create fulltext index ft on aliments (name);
 
 delimiter ^^
 create procedure findFood(line varchar(255))
