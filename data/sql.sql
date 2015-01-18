@@ -37,7 +37,8 @@ delimiter ^^
 create trigger incrementAliment before insert on menus_aliments for each row
 begin
 	update aliments
-	set occurrence = occurrence + 1
+	set occurrence = occurrence + 1,
+	last = curdate()
 	where id = new.id_aliment;
 end;^^
 delimiter ;
