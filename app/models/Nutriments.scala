@@ -9,7 +9,6 @@ case class NutrimentsValue(idAliment: Int, idName: Int, value: Double, unit: Str
 class NutrimentsAliments(tag: Tag) extends Table[NutrimentsAliment](tag, "nutriments_aliments") {
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
   def name = column[String]("name_F")
-  // def category = column[Option[String]]("category_F")
 
   override def * = (id, name) <> (NutrimentsAliment.tupled, NutrimentsAliment.unapply)
 }

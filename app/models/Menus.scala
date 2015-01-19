@@ -6,14 +6,12 @@ import play.api.db.slick.Config.driver.simple._
 import scala.slick.driver.JdbcDriver.backend.Database
 import scala.slick.jdbc.{GetResult, StaticQuery => Q}
 import Q.interpolation
-
 import scala.util.Try
 
 case class Menu(id: Int, date: Timestamp) {}
 case class MenusAliment(id: Int, idMenu: Int, idAliment: Option[Int], name: String, `type`: Int, nutriment: Option[Int]) {}
 case class Aliment(id: Int, name: String, occurrence: Int, last: Timestamp) {}
 case class Type(id: Int, name: String) {}
-// case class Dictionary() {}
 
 class Menus(tag: Tag) extends Table[Menu](tag, "menus") {
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
@@ -57,6 +55,7 @@ class Types(tag: Tag) extends Table[Type](tag, "types") {
 }
 
 object Menus extends TableQuery(new Menus(_)) {
+  // Get Menus and their contents
   def get(start: Timestamp, endOpt: Option[Timestamp] = None)(implicit s: Session) = {
     val end = endOpt.getOrElse(start)
     (Menus.filter(m => m.date >= start && m.date <= end)
@@ -64,22 +63,21 @@ object Menus extends TableQuery(new Menus(_)) {
       join Aliments on (_._2.idAliment === _.id)
       join Types on (_._1._2.`type` === _.id)
       leftJoin NutrimentsAliments on (_._1._1._2.nutriment === _.id)
-    ).map (t => (
+    ).map (t => ( // flatten tuples and transform nullable to options
       t._1._1._1._1,
       t._1._1._1._2,
       (t._1._1._2.id.?, t._1._1._2.name.?, t._1._1._2.occurrence.?, t._1._1._2.last.?),
       t._1._2,
-      (t._2.id.?, t._2.name.?))).run
+      (t._2.id.?, t._2.name.?))
+    ).run
   }
 
+  // Add a menu in the DB, trying to find which kind of food it is
   def add(date: Timestamp, menu: menusDownloader.Menu)(implicit s: Session) {
     val mid = (Menus returning Menus.map(_.id)) += Menu(0, date)
 
-
     val alimentQuery = Q.query[String, (Int, String)]("call findFood(?)")
-    // def alimentQuery(name: String) = sql"call findFood($name)".as[Aliment]
 
-    // TODO Multiple Insertion
     menu.getAliments foreach {
       a => {
         val t = Types !+= Type(a.getType.ordinal, a.getType.name)
@@ -96,6 +94,7 @@ object Menus extends TableQuery(new Menus(_)) {
 }
 
 object MenusAliments extends TableQuery(new MenusAliments(_)) {
+  // Get nutrimentive values for a given aliment
   def getNutriments(id: Int)(implicit s: Session) = {
     (MenusAliments.filter(_.id === id)
       join NutrimentsAliments on (_.nutriment === _.id)
@@ -107,6 +106,7 @@ object MenusAliments extends TableQuery(new MenusAliments(_)) {
 
 object Aliments extends TableQuery(new Aliments(_))
 object Types extends TableQuery(new Types(_)) {
+  // Get id or insert a new type
   def !+=(t: Type)(implicit s: Session) = {
     val query = Types.filter(_.name === t.name)
     Try {
