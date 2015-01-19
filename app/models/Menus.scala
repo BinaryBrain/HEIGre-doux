@@ -64,7 +64,12 @@ object Menus extends TableQuery(new Menus(_)) {
       join Aliments on (_._2.idAliment === _.id)
       join Types on (_._1._2.`type` === _.id)
       leftJoin NutrimentsAliments on (_._1._1._2.nutriment === _.id)
-    ).map (t => (t._1._1._1._1, t._1._1._1._2, t._1._1._2, t._1._2, t._2.id.?, t._2.name.?)).run
+    ).map (t => (
+      t._1._1._1._1,
+      t._1._1._1._2,
+      (t._1._1._2.id.?, t._1._1._2.name.?, t._1._1._2.occurrence.?, t._1._1._2.last.?),
+      t._1._2,
+      (t._2.id.?, t._2.name.?))).run
   }
 
   def add(date: Timestamp, menu: menusDownloader.Menu)(implicit s: Session) {
@@ -77,7 +82,6 @@ object Menus extends TableQuery(new Menus(_)) {
     // TODO Multiple Insertion
     menu.getAliments foreach {
       a => {
-        // TODO Update Aliment (via Trigger?)
         val t = Types !+= Type(a.getType.ordinal, a.getType.name)
 
         val aliment = alimentQuery(a.getName).firstOption.map(_._1)

@@ -120,7 +120,7 @@ object Application extends Controller {
 
       val menus = menusMap map {
         menu => (menu._1, menu._2.map {
-          seq => (seq._2, seq._3, seq._4, seq._5, seq._6)
+          seq => (seq._2, seq._3, seq._4, seq._5)
         })
       }
 
@@ -132,12 +132,12 @@ object Application extends Controller {
             t => Json.obj(
               "id" -> t._1.id,
               "name" -> t._1.name,
-              "occurrence" -> t._2.occurrence,
-              "last" -> t._2.last,
+              "occurrence" -> t._2._3,
+              "last" -> t._2._4,
               "type" -> t._3,
               "nutriments" -> Json.obj(
-                "id" -> t._4,
-                "name" -> t._5
+                "id" -> t._4._1,
+                "name" -> t._4._2
               )
             )
           }

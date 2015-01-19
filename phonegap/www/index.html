@@ -8,6 +8,7 @@
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         
         <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/angular-chart.css">
         <link rel="stylesheet/less" href="less/index.less">
 
         <script src="js/lib/angular.min.js"></script>
@@ -15,6 +16,8 @@
         <script src="js/lib/moment-fr.js"></script>
         <script src="js/lib/less-1.7.5.min.js"></script>
         <script src="js/lib/ui-bootstrap.min.js"></script>
+        <script src="js/lib/Chart.min.js"></script>
+        <script src="js/lib/angular-chart.js"></script>
 
         <script src="js/ready.js"></script>
         <script src="js/index.js"></script>
@@ -39,7 +42,8 @@
                                         <div href="#" class="aliment" ng-repeat="a in m.aliments | orderBy: 'type.id'">
                                             <a ng-click="open(a.id)" ng-if="a.nutriments.id"><span ng-if="a.type.name == 'Sauce'">Sauce: </span>{{ a.name }}</a>
                                             <span ng-if="!a.nutriments.id"><span ng-if="a.type.name == 'Sauce'">Sauce: </span>{{ a.name }}</span>
-                                            <small>(dernière fois: {{ a.last | momentAgo }})</small>
+                                            <!--<small>(dernière fois: {{ a.last | momentAgo }})</small>-->
+                                            <small>- occurrence: {{ a.occurrence }}</small>
                                         </div>
                                     </div>
                                 </div>
@@ -55,6 +59,7 @@
                     <div class="modal-body">
                         <div ng-repeat="a in nutriments">
                             <div class="nutriments-aliment">{{ a.name }} - <small>Pour {{ a.per }}</small></div>
+                            <canvas id="pie" class="chart chart-pie" data="data" options="options" labels="labels" legend="true"></canvas>
                             <table class="table table-striped">
                                 <tr ng-repeat="n in a.values" class="nutriments">
                                     <td>{{ n.o.name }}</td>

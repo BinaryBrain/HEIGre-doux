@@ -1,8 +1,8 @@
 'use strict';
 
-var App = angular.module('App', ['ui.bootstrap', 'btford.phonegap.ready']);
+var App = angular.module('App', ['ui.bootstrap', 'btford.phonegap.ready', 'chart.js']);
 var API_URL = "http://localhost:9000/api";
-API_URL = "http://10.192.94.46:9000/api";
+// API_URL = "http://10.192.94.46:9000/api";
 
 // Show complete error messages in console
 window.onerror = function (errorMsg, url, lineNumber, columnNumber, errorObject) {
@@ -133,6 +133,13 @@ App.controller('nutrimentsCtrl', function ($scope, $modal) {
 App.controller('nutrimentsInstanceCtrl', ['$scope', '$modalInstance', 'id', 'getNutriments', function ($scope, $modalInstance, id, getNutriments) {
     $scope.nutriments = [];
     
+    $scope.labels = [];
+    $scope.data = [];
+    $scope.options = {
+        animationSteps: 30,
+        animationEasing: 'easeOutCubic'
+    };
+
     getNutriments(id, function (data) {
         for (var i = 0, l = data.length; i < l; i++) {
             for (var j = 0, k = data[i].values.length; j < k; j++) {
@@ -151,6 +158,20 @@ App.controller('nutrimentsInstanceCtrl', ['$scope', '$modalInstance', 'id', 'get
                 var res = n['matrix-unit'].match(/^per\s*(\w*)\s*(\w*)\s*.*/);
                 data[i].per = (res) ? res[1] : '???';
                 n.o = { name: name, prefix: prefix, value: n.value, unit: unit, suffix: suffix };
+
+                if (n.name === 'charbohydrate_available') {
+                    $scope.labels.push('Glucides');
+                    $scope.data.push(n.value);
+                } else if (n.name === 'dietary_fibre_total') {
+                    $scope.labels.push('Fibres alimentaires');
+                    $scope.data.push(n.value);
+                } else if (n.name === 'fat_total') {
+                    $scope.labels.push('Lipides');
+                    $scope.data.push(n.value);
+                } else if (n.name === 'protein') {
+                    $scope.labels.push('Protéines');
+                    $scope.data.push(n.value);
+                }
             }
         }
 
@@ -215,7 +236,7 @@ function translateName(n) {
         case "charbohydrate_available":
             return "Glucides disponibles";
         case "fat_total":
-            return "Lipides, totaux"; // ?
+            return "Lipides, totaux";
         case "alcohol":
             return "Alcool";
         case "energy_kJ":

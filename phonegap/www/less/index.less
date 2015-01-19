@@ -17,7 +17,14 @@ h1 {
 }
 
 #container {
-	margin: 30px;
+	max-width: 800px;
+	margin: auto;
+}
+
+@media (max-width: 860px) {
+	#container {
+		margin: 30px;
+	}
 }
 
 #days {
@@ -88,4 +95,8 @@ h1 {
 
 .btn {
 	font-size: 26px !important;
+}
+
+.pie-legend li {
+	line-height: 21px;
 }
