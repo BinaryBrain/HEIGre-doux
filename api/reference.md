@@ -11,7 +11,7 @@ Menus
 ```
 /api/menus               # Today's Menu
 /api/menus/2015-01-06    # Menus for a given day
-/api/menus/14             # Menu with given id
+/api/menus/14            # Menu with given id
 ```
 
 ### Result
@@ -99,7 +99,7 @@ Nutriments
 ### Requests
 
 ```
-GET        /api/nutriments/8
+GET        /api/nutriments/8  # Get nutriment's values for a given id
 ```
 
 ### Results
@@ -122,14 +122,15 @@ nutriments: [{
         value-type: "weighted"
     },
     ...
+    ]}
 ]
 ```
 
 ### Requests
 
 ```
-GET        /api/nutriments/frites
-GET        /api/nutriments
+GET        /api/nutriments/frites   # Get aliment's names containing "frites"
+GET        /api/nutriments          # Get every aliment's names
 ```
 
 ### Results
