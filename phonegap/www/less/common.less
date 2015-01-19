@@ -1,0 +1,81 @@
+@blue: #69D2E7;
+@blue-light: #A7DBD8;
+@grey: #E0E4CC;
+@red-light: #F38630;
+@red: #FA6900;
+
+@white: #eee;
+@black: #000;
+
+html, body {
+	background-color: @red-light;
+	color: @black;
+}
+
+h1 {
+	color: @white;
+}
+
+
+.panel {
+	background-color: @white;
+	border: 5px solid @black;
+}
+
+.panel-default {
+	border-color: @black;
+}
+
+.panel-default>.panel-heading+.panel-collapse>.panel-body {
+	border-top-color: #ddd;
+}
+
+.panel-group .panel-heading+.panel-collapse>.panel-body, .panel-group .panel-heading+.panel-collapse>.list-group {
+	border-top: 0px solid #ddd;
+}
+
+.panel-default>.panel-heading {
+	color: #333;
+	background-color: @grey;
+	border-color: #ddd;
+}
+
+.panel-group .panel {
+	margin-bottom: 0;
+	border-radius: 0;
+}
+
+a, a:hover, a:focus {
+	color: @red;
+	cursor: pointer;
+}
+
+.table-striped>tbody>tr:nth-child(even) {
+  background-color: @white;
+}
+
+.table-bordered>thead>tr>th, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>tbody>tr>td, .table-bordered>tfoot>tr>td {
+  border: 3px solid @black;
+}
+
+.modal-dialog .modal-content {
+	border: 5px solid @black;
+	border-radius: 0;
+
+	.modal-header {
+		min-height: 16.43px;
+		padding: 15px;
+		border-bottom: 5px solid @black;
+	}
+
+	.modal-body {
+		position: relative;
+		padding: 0;
+	}
+
+	.modal-footer {
+		padding: 15px;
+		text-align: right;
+		border-top: 5px solid @black;
+	}
+}

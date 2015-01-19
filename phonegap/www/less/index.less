@@ -1,3 +1,5 @@
+@import "common";
+
 * {
 	margin: 0;
 	padding: 0;
@@ -5,11 +7,11 @@
 }
 
 html, body {
-	font-size: 26px;
+	font-size: 32px;
 }
 
 h1 {
-	font-size: 48px;
+	font-size: 64px;
 	text-align: center;
 	margin: 30px 0;
 }
@@ -20,21 +22,19 @@ h1 {
 
 #days {
 	.day {
-		border: 1px solid black;
+		// border: 1px solid black;
 
 		&:not(:last-child) {
 			margin-bottom: 10px;
 		}
 
 		.menu {
-			padding: 20px 0;
+			padding: 20px;
 		}
 
 		#menus {
 			.menu {
-				&:not(:first-child) {
-					border-top: 1px solid black;
-				}
+				border-top: 5px solid black;
 
 				#aliments {
 					.aliment {
@@ -50,18 +50,42 @@ h1 {
 	}
 }
 
+.modal-body table {
+	margin: 0;
+	padding: 0;
+
+	td, th {
+		padding: 8px;
+		line-height: 1.42857143;
+		vertical-align: top;
+		border-top: 3px solid @black !important;
+	}
+}
+
 .nutriments {
-	font-size: 18px;
+	font-size: 28px;
+}
+
+.nutriments-aliment {
+	padding: 15px;
 }
 
 .panel-title {
-	font-size: 30px;
+	font-size: 38px;
 }
 
 .panel-body {
-	padding: 0 20px;
+	padding: 0;
 }
 
 .modal-backdrop {
 	bottom: 0; // Bootstrap bug fix
+}
+
+.modal-title {
+	font-size: 38px;
+}
+
+.btn {
+	font-size: 26px !important;
 }
