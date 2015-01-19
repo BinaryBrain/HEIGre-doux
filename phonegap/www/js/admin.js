@@ -136,6 +136,10 @@ App.controller('mainCtrl', function ($scope, $rootScope, $http) {
             }
         }
 
+        if(!nut || !nut.id || !nut.name) {
+            return arr;
+        }
+
         arr.push(nut);
         return arr;
     }
