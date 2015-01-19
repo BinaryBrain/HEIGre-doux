@@ -11,7 +11,6 @@ Menus
 ```
 /api/menus               # Today's Menu
 /api/menus/2015-01-06    # Menus for a given day
-/api/menus/14            # Menu with given id
 ```
 
 ### Result

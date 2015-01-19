@@ -34,7 +34,7 @@
                                 <tr href="#" class="aliment" ng-repeat="a in m.aliments | orderBy: 'type.id'">
                                     <td ng-click="open(a.id)"><span ng-if="a.type.name == 'Sauce'">Sauce: </span>{{ a.name }}</td>
                                     <td>{{ a.type.name }}</td>
-                                    <td><input class="form-control" ng-model="searches[a.id]" ng-change="getNutrimentsList(a)"></input></td>
+                                    <td><input placeholder="Search..." class="form-control" ng-model="searches[a.id]" ng-change="getNutrimentsList(a)"></input></td>
                                     <td><select class="form-control" ng-model="a.nutriments" ng-options="r as r.name for r in addNutriment(results[a.id], a.nutriments)" ng-change="updateNutriments(a)"></select></td>
                                 </tr>
                             </div>
@@ -47,7 +47,6 @@
                 <div ng-repeat="n in a.values">
                     {{ n.name }}: {{ n.formattedValue }}
                 </div>
-                <code>{{ a | json }}</code>
             </div>
         </div>
     </body>

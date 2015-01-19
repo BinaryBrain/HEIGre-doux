@@ -23,17 +23,20 @@ import models._
 import menusDownloader._
 
 object Application extends Controller {
+  // Admin view
   def admin = Action {
     val content = new String(Files.readAllBytes(Paths.get("phonegap/www/admin.html")))
     Ok(content).as(HTML)
   }
 
+  // PhoneGap view
   def phonegap = Action {
     val content = new String(Files.readAllBytes(Paths.get("phonegap/www/index.html")))
     Ok(content).as(HTML)
   }
 
-  def getMenus = Action {
+  // Download weekly menus
+  def downloadMenus = Action {
     val properties = new Properties()
     val path = "conf/config.properties"
     val inputStream = new FileInputStream(path)
@@ -82,6 +85,7 @@ object Application extends Controller {
     }
   }
 
+  // Get any file from server
   def get(file: String) = Action {
     val source = Paths.get("phonegap/www/" + file)
     val mime = Files.probeContentType(source)
@@ -91,16 +95,19 @@ object Application extends Controller {
     Ok(content).as(withCharset(mime))
   }
 
+  // Get daily menu
   def getTodayMenu: Action[AnyContent] = Action {
     val today: LocalDate = LocalDate.now
     Ok(getMenu(new Timestamp(today.toEpochDay * TimeConstant.MS_PER_DAY)))
   }
 
+  // Get menu at a given date
   def getMenuByDate(dateStr: String): Action[AnyContent] = Action {
     val date: LocalDate = LocalDate.parse(dateStr)
     Ok(getMenu(new Timestamp(date.toEpochDay * TimeConstant.MS_PER_DAY)))
   }
 
+  // Get menus in a range of dates
   def getMenuRange(startStr: String, endStr: String) = Action {
     val startDate: LocalDate = LocalDate.parse(startStr)
     val endDate: LocalDate = LocalDate.parse(endStr)
@@ -111,8 +118,7 @@ object Application extends Controller {
     Ok(getMenu(start, Option(end)))
   }
 
-  def getMenuById(id: Int) = TODO
-
+  // Menu getter interface
   def getMenu(start: Timestamp, end: Option[Timestamp] = None): JsValue = {
     DB.withSession { implicit session =>
       val menusAliments = Menus.get(start, end)
@@ -148,6 +154,7 @@ object Application extends Controller {
     }
   }
 
+  // Get nutriements for a specific aliment
   def getNutrimentsForId(id: Int) = Action {
     DB.withSession { implicit session =>
       val nutriments = MenusAliments.getNutriments(id).groupBy(_._1)
@@ -171,19 +178,7 @@ object Application extends Controller {
     }
   }
 
-  def getNutrimentsFromName(name: String) = Action {
-    DB.withSession { implicit session =>
-      val nutriments = NutrimentsAliments.filter(_.name like "%"+name+"%").list.map {
-        n => Json.obj(
-          "id" -> n.id,
-          "name" -> n.name_F
-        )
-      }
-
-      Ok(Json.obj("nutriments" -> nutriments))
-    }
-  }
-
+  // Get a list of every aliments in the nutriments' table
   def getNutriments = Action {
     DB.withSession { implicit session =>
       val nutriments = NutrimentsAliments.list.map {
@@ -197,6 +192,21 @@ object Application extends Controller {
     }
   }
 
+  // Get a list of every aliments in the nutriments' table matching %name%
+  def getNutrimentsFromName(name: String) = Action {
+    DB.withSession { implicit session =>
+      val nutriments = NutrimentsAliments.filter(_.name like "%"+name+"%").list.map {
+        n => Json.obj(
+          "id" -> n.id,
+          "name" -> n.name_F
+        )
+      }
+
+      Ok(Json.obj("nutriments" -> nutriments))
+    }
+  }
+
+  // Link an aliment from the menus to a nutriment's aliment
   def setNutriments(aid: Int, nid: Int) = Action {
     DB.withSession { implicit session =>
       MenusAliments.filter(_.id === aid).map(_.nutriment).update(Option(nid))
