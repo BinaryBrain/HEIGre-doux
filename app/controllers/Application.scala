@@ -120,7 +120,7 @@ object Application extends Controller {
 
       val menus = menusMap map {
         menu => (menu._1, menu._2.map {
-          seq => (seq._2, seq._3, seq._4)
+          seq => (seq._2, seq._3, seq._4, seq._5, seq._6)
         })
       }
 
@@ -135,7 +135,10 @@ object Application extends Controller {
               "occurrence" -> t._2.occurrence,
               "last" -> t._2.last,
               "type" -> t._3,
-              "nutriments" -> t._1.nutriment
+              "nutriments" -> Json.obj(
+                "id" -> t._4,
+                "name" -> t._5
+              )
             )
           }
         )
@@ -166,6 +169,40 @@ object Application extends Controller {
 
       Ok(Json.obj("nutriments" -> json))
     }
+  }
+
+  def getNutrimentsFromName(name: String) = Action {
+    DB.withSession { implicit session =>
+      val nutriments = NutrimentsAliments.filter(_.name like "%"+name+"%").list.map {
+        n => Json.obj(
+          "id" -> n.id,
+          "name" -> n.name_F
+        )
+      }
+
+      Ok(Json.obj("nutriments" -> nutriments))
+    }
+  }
+
+  def getNutriments = Action {
+    DB.withSession { implicit session =>
+      val nutriments = NutrimentsAliments.list.map {
+        n => Json.obj(
+          "id" -> n.id,
+          "name" -> n.name_F
+        )
+      }
+
+      Ok(Json.obj("nutriments" -> nutriments))
+    }
+  }
+
+  def setNutriments(aid: Int, nid: Int) = Action {
+    DB.withSession { implicit session =>
+      MenusAliments.filter(_.id === aid).map(_.nutriment).update(Option(nid))
+    }
+
+    Ok("OK")
   }
 }
 

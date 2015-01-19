@@ -37,8 +37,8 @@
                                     <div id="votes"></div>
                                     <div id="aliments">
                                         <div href="#" class="aliment" ng-repeat="a in m.aliments | orderBy: 'type.id'">
-                                            <a ng-click="open(a.id)" ng-if="a.nutriment"><span ng-if="a.type.name == 'Sauce'">Sauce: </span>{{ a.name }}</a>
-                                            <span ng-if="!a.nutriment"><span ng-if="a.type.name == 'Sauce'">Sauce: </span>{{ a.name }}</span>
+                                            <a ng-click="open(a.id)" ng-if="a.nutriments.id"><span ng-if="a.type.name == 'Sauce'">Sauce: </span>{{ a.name }}</a>
+                                            <span ng-if="!a.nutriments.id"><span ng-if="a.type.name == 'Sauce'">Sauce: </span>{{ a.name }}</span>
                                             <small>(dernière fois: {{ a.last | momentAgo }})</small>
                                         </div>
                                     </div>
@@ -55,10 +55,14 @@
                     <div class="modal-body">
                         <div ng-repeat="a in nutriments">
                             <div>{{ a.name }}</div>
-                            <div ng-repeat="n in a.values">
-                                {{ n.name }}: {{ n.formattedValue }}
-                            </div>
-                            <code>{{ a | json }}</code>
+                            <small>Pour {{ a.per }}</small>
+                            <table>
+                                <tr ng-repeat="n in a.values" class="nutriments">
+                                    <td>{{ n.name }}</td>
+                                    <td>{{ n.o.prefix }}{{ n.o.value }}{{ n.o.unit }}</td>
+                                    <td>{{ n.o.suffix }}</td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                     <div class="modal-footer">

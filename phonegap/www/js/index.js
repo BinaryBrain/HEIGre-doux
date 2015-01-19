@@ -65,7 +65,7 @@ App.controller('mainCtrl', function ($scope, $rootScope, $http) {
         return arr;
     }
 
-    $scope.nutriments = []
+    $scope.nutriments = [];
 
     $scope.getNutriments = function (id, cb) {
         $http.get(API_URL + "/nutriments/" + id)
@@ -137,10 +137,18 @@ App.controller('nutrimentsInstanceCtrl', ['$scope', '$modalInstance', 'id', 'get
         for (var i = 0, l = data.length; i < l; i++) {
             for (var j = 0, k = data[i].values.length; j < k; j++) {
                 var n = data[i].values[j];
-                var res = n['matrix-unit'].match(/$per\s*(\w*)\s*(\w*)\s*.*/); // TODO test and use this
-                // var unit = res[2];
-                // var per = res[1];
-                n.formattedValue = n.value /*+ unit + ' pour ' + n['matrix-unit'] + unit*/;
+                var unit = n.unit;
+                var type = n['value-type'];
+
+                unit = shortenUnit(unit);
+                type = translateType(type);
+
+                var prefix = (type === 'less than') ? '<' : '';
+                var suffix = (type !== 'less than') ? ' ('+type+')' : '';
+
+                var res = n['matrix-unit'].match(/^per\s*(\w*)\s*(\w*)\s*.*/);
+                data[i].per = (res) ? res[1] : '???';
+                n.o = { prefix: prefix, value: n.value, unit: unit, suffix: suffix };
             }
         }
 
@@ -151,3 +159,45 @@ App.controller('nutrimentsInstanceCtrl', ['$scope', '$modalInstance', 'id', 'get
         $modalInstance.close();
     };
 }]);
+
+function shortenUnit(u) {
+    switch (u) {
+        case "gram":
+            return "g";
+        case "milligram":
+            return "mg";
+        case "microgram":
+            return "µg";
+        case "kilojoule":
+            return "kJ";
+        case "kilocalorie":
+            return "kcal";
+        case "retinol equivalent":
+            return " RE";
+        case "alpha-tocopherol equivalent":
+            return " α-TE";
+        default:
+            return ' '+u;
+    }
+}
+
+function translateType(t) {
+    switch (t) {
+        case "weighted":
+            return "mesuré";
+        case "mean":
+            return "en moyenne";
+        case "trace":
+            return "trace";
+        case "as reported":
+            return "rapportée";
+        case "logical zero":
+            return "logiquement";
+        case "best estimate":
+            return "meilleur estimation";
+        case "value type not known":
+            return "inconnu";
+        default:
+            return t;
+    }
+}

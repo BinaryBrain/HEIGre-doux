@@ -16,6 +16,10 @@ GET        /api/menus/$id<[0-9]+>                                               
 GET        /api/menus                                                                            controllers.Application.getTodayMenu
 
 GET        /api/nutriments/$id<[0-9]+>                                                           controllers.Application.getNutrimentsForId(id: Int)
+GET        /api/nutriments/$name<\w+>                                                            controllers.Application.getNutrimentsFromName(name: String)
+GET        /api/nutriments                                                                       controllers.Application.getNutriments
+
+POST        /api/nutriments/$aid<[0-9]+>/$nid<[0-9]+>                                            controllers.Application.setNutriments(aid: Int, nid: Int)
 
 # Map static resources from the /public folder to the /assets URL path
 GET        /*file                                                                                controllers.Application.get(file)

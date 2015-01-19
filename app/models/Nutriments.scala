@@ -2,16 +2,16 @@ package models
 
 import play.api.db.slick.Config.driver.simple._
 
-case class NutrimentsAliment(id: Int, name_F: String, cateory_F: Option[String]) {}
+case class NutrimentsAliment(id: Int, name_F: String) {}
 case class NutrimentsName(id: Int, name: String) {}
 case class NutrimentsValue(idAliment: Int, idName: Int, value: Double, unit: String, matrix: String, valueType: String) {}
 
 class NutrimentsAliments(tag: Tag) extends Table[NutrimentsAliment](tag, "nutriments_aliments") {
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
   def name = column[String]("name_F")
-  def category = column[Option[String]]("category_F")
+  // def category = column[Option[String]]("category_F")
 
-  override def * = (id, name, category) <> (NutrimentsAliment.tupled, NutrimentsAliment.unapply)
+  override def * = (id, name) <> (NutrimentsAliment.tupled, NutrimentsAliment.unapply)
 }
 
 class NutrimentsNames(tag: Tag) extends Table[NutrimentsName](tag, "nutriments_names") {
