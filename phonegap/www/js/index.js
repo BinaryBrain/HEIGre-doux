@@ -11,11 +11,11 @@ window.onerror = function (errorMsg, url, lineNumber, columnNumber, errorObject)
     }
 }
 
-var s;
-
+// Main controller
 App.controller('mainCtrl', function ($scope, $rootScope, $http) {
     moment.locale('fr');
 
+    // Getting and processing menus
     var menus = [];
 
     var today = new Date();
@@ -68,6 +68,7 @@ App.controller('mainCtrl', function ($scope, $rootScope, $http) {
     $scope.nutriments = [];
     $scope.disableVotes = [];
 
+    // Getting and processing nutriments
     $scope.getNutriments = function (id, cb) {
         $http.get(API_URL + "/nutriments/" + id)
             .success(function (data) {
@@ -108,7 +109,6 @@ App.filter('momentAgo', function () {
   };
 });
 
-
 App.controller('AccordionCtrl', function ($scope) {
   $scope.oneAtATime = true;
 });
@@ -131,6 +131,8 @@ function capFirst(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+
+// Nutriment controller
 App.controller('nutrimentsCtrl', function ($scope, $modal) {
     $scope.open = function (id) {
         var modalInstance = $modal.open({
@@ -152,6 +154,7 @@ App.controller('nutrimentsCtrl', function ($scope, $modal) {
     };
 });
 
+// Nutriment modal controller
 App.controller('nutrimentsInstanceCtrl', ['$scope', '$modalInstance', 'id', 'getNutriments', function ($scope, $modalInstance, id, getNutriments) {
     $scope.nutriments = [];
     
@@ -159,7 +162,8 @@ App.controller('nutrimentsInstanceCtrl', ['$scope', '$modalInstance', 'id', 'get
     $scope.data = [];
     $scope.options = {
         animationSteps: 30,
-        animationEasing: 'easeOutCubic'
+        animationEasing: 'easeOutCubic',
+        tooltipFontSize: 28
     };
 
     getNutriments(id, function (data) {
@@ -181,6 +185,7 @@ App.controller('nutrimentsInstanceCtrl', ['$scope', '$modalInstance', 'id', 'get
                 data[i].per = (res) ? res[1] : '???';
                 n.o = { name: name, prefix: prefix, value: n.value, unit: unit, suffix: suffix };
 
+                // Adding values to the pie chart
                 if (n.name === 'charbohydrate_available') {
                     $scope.labels.push('Glucides');
                     $scope.data.push(n.value);
@@ -205,6 +210,7 @@ App.controller('nutrimentsInstanceCtrl', ['$scope', '$modalInstance', 'id', 'get
     };
 }]);
 
+// Various conversions
 function shortenUnit(u) {
     switch (u) {
         case "gram":

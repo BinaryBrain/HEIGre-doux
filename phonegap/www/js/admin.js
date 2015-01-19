@@ -11,9 +11,11 @@ window.onerror = function (errorMsg, url, lineNumber, columnNumber, errorObject)
     }
 }
 
+// Main controller
 App.controller('mainCtrl', function ($scope, $rootScope, $http) {
     moment.locale('fr');
 
+    // Getting and processing menus
     $scope.searches = [];
     $scope.results = [];
 
@@ -83,6 +85,7 @@ App.controller('mainCtrl', function ($scope, $rootScope, $http) {
         return arr;
     }
     
+    // Getting and processing nutriments
     function getNutriments(name, cb) {
         $http.get(API_URL + "/nutriments/" + name)
             .success(function (data) {
