@@ -39,8 +39,8 @@
                                 <div class="menu" ng-repeat="m in d.menus">
                                     <table id="votes">
                                         <tr>
-                                            <td><button ng-click="upvote(m.id)" type="button" class="btn btn-success btn-vote">+</button></td>
-                                            <td><button ng-click="downvote(m.id)" type="button" class="btn btn-danger btn-vote">-</button></td>
+                                            <td><button ng-click="upvote(m)" ng-disabled="disableVotes[m.id]" type="button" class="btn btn-success btn-vote">+</button></td>
+                                            <td><button ng-click="downvote(m)" ng-disabled="disableVotes[m.id]" type="button" class="btn btn-danger btn-vote">-</button></td>
                                         </tr>
                                         <tr>
                                             <td>{{ m.upvote }}</td>

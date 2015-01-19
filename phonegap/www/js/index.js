@@ -66,6 +66,7 @@ App.controller('mainCtrl', function ($scope, $rootScope, $http) {
     }
 
     $scope.nutriments = [];
+    $scope.disableVotes = [];
 
     $scope.getNutriments = function (id, cb) {
         $http.get(API_URL + "/nutriments/" + id)
@@ -78,20 +79,22 @@ App.controller('mainCtrl', function ($scope, $rootScope, $http) {
             });
     }
 
-    $scope.upvote = function (id) {
-        $http.post(API_URL + "/upvote/" + id)
+    $scope.upvote = function (m) {
+        $http.post(API_URL + "/upvote/" + m.id)
             .success(function (data) {
-                alert("OK!")
+                $scope.disableVotes[m.id] = true;
+                m.upvote++;
             })
             .error(function (data, status, headers, config) {
                 alert("Erreur de connexion. Impossible de récupérer les nutriments.");
             });
     }
 
-    $scope.downvote = function (id) {
-        $http.post(API_URL + "/downvote/" + id)
+    $scope.downvote = function (m) {
+        $http.post(API_URL + "/downvote/" + m.id)
             .success(function (data) {
-                alert("OK!")
+                $scope.disableVotes[m.id] = true;
+                m.downvote++;
             })
             .error(function (data, status, headers, config) {
                 alert("Erreur de connexion. Impossible de récupérer les nutriments.");
