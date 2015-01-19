@@ -31,16 +31,8 @@ Menus
 Aliment
 -------
 
-### Request
-
-```
-/api/aliment/2             # Menu with given id
-```
-
-### Result
-
 ```javascript
-    aliment: { id: 2, name: "riz", type: <type> }
+    aliment: { id: 2, name: "riz", occurrence: 3, last: "2015-01-18T23:59:54.00Z", type: <type>, nutriments: <nutriments> }
 ```
 
 Type
@@ -58,30 +50,98 @@ Type
     type: { id: 4, name: "feculent" }
 ```
 
+Nutriments
+----------
+
+```javascript
+    nutriments: { id: 1066, name: "Riz blanc, cuit à l'eau salée (sel non iodé)" }
+```
+
 Complete Example
 ----------------
 
 ```javascript
     {
         menus: [{
-            id: 14,
-            date: "2015-01-06",
-            aliments: [
-                { id: 2, name: "riz", type: { id: 4, name: "feculent" } },
-                { id: 4, name: "salade verte", type: { id: 2, name: "legume" } },
-                { id: 8, name: "pavé de saumon", type: { id: 3, name: "poisson" } },
-                { id: 12, name: "fruit", type: { id: 1, name: "dessert" } }
-            ]
+            id: 66,
+            name: "Riz blanc",
+            occurrence: 0,
+            last: "2015-01-18T23:59:54.00Z",
+            type: {
+                id: 3,
+                name: "Accompagnement"
+            },
+            nutriments: {
+                id: 1066,
+                name: "Riz blanc, cuit à l'eau salée (sel non iodé)"
+            }
         },
         {
-            id: 14,
-            date: "2015-01-06",
-            aliments: [
-                { id: 2, name: "riz", type: { id: 4, name: "feculent" } },
-                { id: 4, name: "salade verte", type: { id: 2, name: "legume" } },
-                { id: 8, name: "pavé de saumon", type: { id: 3, name: "poisson" } },
-                { id: 12, name: "fruit", type: { id: 1, name: "dessert" } }
-            ]
+            id: 63,
+            name: "Fruit",
+            occurrence: 0,
+            last: "2015-01-18T23:59:54.00Z",
+            type: {
+                id: 5,
+                name: "Dessert"
+            },
+            nutriments: {
+                id: 1123,
+                name: "Fruit (moyenne), cru"
+            }
         }]
     }
 ```
+
+Nutriments
+----------
+
+### Requests
+
+```
+GET        /api/nutriments/8
+```
+
+### Results
+
+```javascript
+nutriments: [{
+    name: "Fruit (moyenne), cru",
+    values: [{
+        name: "protein",
+        value: 0.662,
+        unit: "gram",
+        matrix-unit: "per 100g edible portion",
+        value-type: "weighted"
+    },
+    {
+        name: "charbohydrate_total",
+        value: 13.9,
+        unit: "gram",
+        matrix-unit: "per 100g edible portion",
+        value-type: "weighted"
+    },
+    ...
+]
+```
+
+### Requests
+
+```
+GET        /api/nutriments/frites
+GET        /api/nutriments
+```
+
+### Results
+
+```javascript
+nutriments: [{
+        id: 818,
+        name: "Frites au four (pommes de terre précuites en friture), surgelées"
+    },
+    {
+        id: 850,
+        name: "Pommes frites"
+    }]
+```
+
