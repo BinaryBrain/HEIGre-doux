@@ -37,7 +37,16 @@
                         <accordion-group class="day" ng-repeat="d in dailyMenus | orderBy: 'date'" heading="{{ d.frenchDate }}" is-open="d.isOpen">
                             <div id="menus">
                                 <div class="menu" ng-repeat="m in d.menus">
-                                    <div id="votes"></div>
+                                    <table id="votes">
+                                        <tr>
+                                            <td><button ng-click="upvote(m.id)" type="button" class="btn btn-success btn-vote">+</button></td>
+                                            <td><button ng-click="downvote(m.id)" type="button" class="btn btn-danger btn-vote">-</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ m.upvote }}</td>
+                                            <td>{{ m.downvote }}</td>
+                                        </tr>
+                                    </table>
                                     <div id="aliments">
                                         <div href="#" class="aliment" ng-repeat="a in m.aliments | orderBy: 'type.id'">
                                             <a ng-click="open(a.id)" ng-if="a.nutriments.id"><span ng-if="a.type.name == 'Sauce'">Sauce: </span>{{ a.name }}</a>

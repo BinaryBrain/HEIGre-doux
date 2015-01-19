@@ -35,6 +35,8 @@ object Application extends Controller {
     Ok(content).as(HTML)
   }
 
+  // -- MENUS
+
   // Download weekly menus
   def downloadMenus = Action {
     val properties = new Properties()
@@ -134,6 +136,8 @@ object Application extends Controller {
         menu => Json.obj(
           "id" -> menu._1.id,
           "date" -> menu._1.date,
+          "upvote" -> menu._1.upvote,
+          "downvote" -> menu._1.downvote,
           "aliments" -> menu._2.map {
             t => Json.obj(
               "id" -> t._1.id,
@@ -153,6 +157,24 @@ object Application extends Controller {
       Json.obj("menus" -> json)
     }
   }
+
+  // Upvote a menu
+  def upvote(id: Int) = Action {
+    DB.withSession { implicit session =>
+      Menus.upvote(id)
+      Ok("OK")
+    }
+  }
+
+  // Downvote a menu
+  def downvote(id: Int) = Action {
+    DB.withSession { implicit session =>
+      Menus.downvote(id)
+      Ok("OK")
+    }
+  }
+
+  // -- NUTRIMENTS
 
   // Get nutriements for a specific aliment
   def getNutrimentsForId(id: Int) = Action {

@@ -19,6 +19,8 @@ Menus
     menus: [{
         id: 14,
         date: "2015-01-06",
+        upvote: 4,
+        downvote: 2,
         aliments: [
             <aliment1>,
             <...>,

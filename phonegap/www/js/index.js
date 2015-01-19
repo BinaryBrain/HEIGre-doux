@@ -78,6 +78,25 @@ App.controller('mainCtrl', function ($scope, $rootScope, $http) {
             });
     }
 
+    $scope.upvote = function (id) {
+        $http.post(API_URL + "/upvote/" + id)
+            .success(function (data) {
+                alert("OK!")
+            })
+            .error(function (data, status, headers, config) {
+                alert("Erreur de connexion. Impossible de récupérer les nutriments.");
+            });
+    }
+
+    $scope.downvote = function (id) {
+        $http.post(API_URL + "/downvote/" + id)
+            .success(function (data) {
+                alert("OK!")
+            })
+            .error(function (data, status, headers, config) {
+                alert("Erreur de connexion. Impossible de récupérer les nutriments.");
+            });
+    }
 });
 
 App.filter('momentAgo', function () {

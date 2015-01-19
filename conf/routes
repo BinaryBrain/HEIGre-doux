@@ -3,22 +3,25 @@
 # ~~~~
 
 # Home page
-GET        /                                                                                     controllers.Application.admin
-GET        /phonegap                                                                             controllers.Application.phonegap
-GET        /admin                                                                                controllers.Application.admin
-GET        /download-menus                                                                        controllers.Application.downloadMenus
+GET         /                                                                                     controllers.Application.admin
+GET         /phonegap                                                                             controllers.Application.phonegap
+GET         /admin                                                                                controllers.Application.admin
+GET         /download-menus                                                                       controllers.Application.downloadMenus
 
 # RESTful API
-GET        /api/menus/$time<[0-9]{4}-[0-9]{2}-[0-9]{2}>                                          controllers.Application.getMenuByDate(time: String)
-GET        /api/menus/$start<[0-9]{4}-[0-9]{2}-[0-9]{2}>/$end<[0-9]{4}-[0-9]{2}-[0-9]{2}>        controllers.Application.getMenuRange(start: String, end: String)
+GET         /api/menus/$time<[0-9]{4}-[0-9]{2}-[0-9]{2}>                                          controllers.Application.getMenuByDate(time: String)
+GET         /api/menus/$start<[0-9]{4}-[0-9]{2}-[0-9]{2}>/$end<[0-9]{4}-[0-9]{2}-[0-9]{2}>        controllers.Application.getMenuRange(start: String, end: String)
 
-GET        /api/menus                                                                            controllers.Application.getTodayMenu
+GET         /api/menus                                                                            controllers.Application.getTodayMenu
 
-GET        /api/nutriments/$id<[0-9]+>                                                           controllers.Application.getNutrimentsForId(id: Int)
-GET        /api/nutriments/$name<\w+>                                                            controllers.Application.getNutrimentsFromName(name: String)
-GET        /api/nutriments                                                                       controllers.Application.getNutriments
+GET         /api/nutriments/$id<[0-9]+>                                                           controllers.Application.getNutrimentsForId(id: Int)
+GET         /api/nutriments/$name<\w+>                                                            controllers.Application.getNutrimentsFromName(name: String)
+GET         /api/nutriments                                                                       controllers.Application.getNutriments
 
-POST        /api/nutriments/$aid<[0-9]+>/$nid<[0-9]+>                                            controllers.Application.setNutriments(aid: Int, nid: Int)
+POST        /api/upvote/$id<[0-9]+>                                                               controllers.Application.upvote(id: Int)
+POST        /api/downvote/$id<[0-9]+>                                                             controllers.Application.downvote(id: Int)
+
+POST        /api/nutriments/$aid<[0-9]+>/$nid<[0-9]+>                                             controllers.Application.setNutriments(aid: Int, nid: Int)
 
 # Map static resources from the /public folder to the /assets URL path
-GET        /*file                                                                                controllers.Application.get(file)
+GET         /*file                                                                                controllers.Application.get(file)

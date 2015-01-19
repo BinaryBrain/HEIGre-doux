@@ -1,6 +1,9 @@
 package models
 
 import java.sql.Timestamp
+import java.time.{ZoneOffset, ZoneId, LocalDate}
+import controllers.TimeConstant
+
 import scala.collection.JavaConversions._
 import play.api.db.slick.Config.driver.simple._
 import scala.slick.driver.JdbcDriver.backend.Database
@@ -8,7 +11,7 @@ import scala.slick.jdbc.{GetResult, StaticQuery => Q}
 import Q.interpolation
 import scala.util.Try
 
-case class Menu(id: Int, date: Timestamp) {}
+case class Menu(id: Int, date: Timestamp, upvote: Int, downvote: Int) {}
 case class MenusAliment(id: Int, idMenu: Int, idAliment: Option[Int], name: String, `type`: Int, nutriment: Option[Int]) {}
 case class Aliment(id: Int, name: String, occurrence: Int, last: Timestamp) {}
 case class Type(id: Int, name: String) {}
@@ -16,8 +19,10 @@ case class Type(id: Int, name: String) {}
 class Menus(tag: Tag) extends Table[Menu](tag, "menus") {
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
   def date = column[Timestamp]("date")
+  def upvote = column[Int]("upvote")
+  def downvote = column[Int]("downvote")
 
-  def * = (id, date) <> (Menu.tupled, Menu.unapply)
+  def * = (id, date, upvote, downvote) <> (Menu.tupled, Menu.unapply)
 }
 
 class MenusAliments(tag: Tag) extends Table[MenusAliment](tag, "menus_aliments") {
@@ -57,7 +62,12 @@ class Types(tag: Tag) extends Table[Type](tag, "types") {
 object Menus extends TableQuery(new Menus(_)) {
   // Get Menus and their contents
   def get(start: Timestamp, endOpt: Option[Timestamp] = None)(implicit s: Session) = {
-    val end = endOpt.getOrElse(start)
+
+    val today: LocalDate = LocalDate.now
+    val zone: ZoneId = ZoneId.of("Europe/Paris")
+    val endDefault = new Timestamp(today.atTime(23, 59).atZone(zone).toEpochSecond() * 1000)
+
+    val end = endOpt.getOrElse(endDefault)
     (Menus.filter(m => m.date >= start && m.date <= end)
       join MenusAliments on (_.id === _.idMenu)
       join Aliments on (_._2.idAliment === _.id)
@@ -74,7 +84,7 @@ object Menus extends TableQuery(new Menus(_)) {
 
   // Add a menu in the DB, trying to find which kind of food it is
   def add(date: Timestamp, menu: menusDownloader.Menu)(implicit s: Session) {
-    val mid = (Menus returning Menus.map(_.id)) += Menu(0, date)
+    val mid = (Menus returning Menus.map(_.id)) += Menu(0, date, 0, 0)
 
     val alimentQuery = Q.query[String, (Int, String)]("call findFood(?)")
 
@@ -90,6 +100,16 @@ object Menus extends TableQuery(new Menus(_)) {
         MenusAliments += MenusAliment(0, mid, aliment, a.getName, t.id, None)
       }
     }
+  }
+
+  def upvote(id: Int)(implicit s: Session) = {
+    val (up, date) = Menus.filter(_.id === id).map(m => (m.upvote, m.date)).first
+    Menus.filter(_.id === id).map(m => (m.upvote, m.date)).update(up + 1, date).run
+  }
+
+  def downvote(id: Int)(implicit s: Session) = {
+    val (down, date) = Menus.filter(_.id === id).map(m => (m.downvote, m.date)).first
+    Menus.filter(_.id === id).map(m => (m.downvote, m.date)).update(down + 1, date).run
   }
 }
 
