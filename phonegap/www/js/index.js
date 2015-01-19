@@ -139,7 +139,9 @@ App.controller('nutrimentsInstanceCtrl', ['$scope', '$modalInstance', 'id', 'get
                 var n = data[i].values[j];
                 var unit = n.unit;
                 var type = n['value-type'];
+                var name = n.name;
 
+                name = translateName(name);
                 unit = shortenUnit(unit);
                 type = translateType(type);
 
@@ -148,7 +150,7 @@ App.controller('nutrimentsInstanceCtrl', ['$scope', '$modalInstance', 'id', 'get
 
                 var res = n['matrix-unit'].match(/^per\s*(\w*)\s*(\w*)\s*.*/);
                 data[i].per = (res) ? res[1] : '???';
-                n.o = { prefix: prefix, value: n.value, unit: unit, suffix: suffix };
+                n.o = { name: name, prefix: prefix, value: n.value, unit: unit, suffix: suffix };
             }
         }
 
@@ -175,7 +177,9 @@ function shortenUnit(u) {
         case "retinol equivalent":
             return " RE";
         case "alpha-tocopherol equivalent":
-            return " α-TE";
+            return "mg-ATE";
+        case "beta-carotene equivalent":
+            return "µg-BCE";
         default:
             return ' '+u;
     }
@@ -199,5 +203,82 @@ function translateType(t) {
             return "inconnu";
         default:
             return t;
+    }
+}
+
+function translateName(n) {
+    switch (n) {
+        case "protein":
+            return "Protéines";
+        case "charbohydrate_total":
+            return "";
+        case "charbohydrate_available":
+            return "";
+        case "fat_total":
+            return "Lipides, totaux"; // ?
+        case "alcohol":
+            return "Alcool";
+        case "energy_kJ":
+            return "Énergie, kilojoules";
+        case "energy_kcal":
+            return "Énergie, calories";
+        case "water":
+            return "Eau";
+        case "fatty_acids_total_saturated":
+            return "Acides gras sat.";
+        case "fatty_acids_total_mono_unsaturated":
+            return "Acides gras mono-insat.";
+        case "fatty_acids_total_poly_unsaturated":
+            return "Acides gras poly-insat.";
+        case "cholesterol":
+            return "Cholestérol";
+        case "starch_total":
+            return "Amidon";
+        case "sugar_total":
+            return "Sucre";
+        case "dietary_fibre_total":
+            return "Fibres alimentaires";
+        case "sodium":
+            return "Sodium";
+        case "potassium":
+            return "Potassium";
+        case "chlorid":
+            return "Clor";
+        case "calcium":
+            return "Calcium";
+        case "magnesium":
+            return "Magnesium";
+        case "phosphor":
+            return "Phosphore";
+        case "iron_total":
+            return "Fer";
+        case "zinc":
+            return "Zinc";
+        case "iodide":
+            return "Iode";
+        case "vit_A":
+            return "Activité de vit. A";
+        case "B1":
+            return "Vit. B1 (thiamine)";
+        case "B2":
+            return "Vit. B2 (riboflavine)";
+        case "B6":
+            return "Vit. B6 (pyridoxine)";
+        case "B12":
+            return "Vit. B12 (cobalamine)";
+        case "C":
+            return "Vit. C (acide ascorbique)";
+        case "D":
+            return "Vit. D (calciférol)";
+        case "E":
+            return "Activité de vit. E";
+        case "niacine":
+            return "Niacine";
+        case "folate":
+            return "Folate";
+        case "pantothenic_acid":
+            return "Acide pantothénique";
+        default:
+            return n;
     }
 }
