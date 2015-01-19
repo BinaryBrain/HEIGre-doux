@@ -54,7 +54,7 @@
                     </div>
                     <div class="modal-body">
                         <div ng-repeat="a in nutriments">
-                            <div>{{ a.name }} - <small>Pour {{ a.per }}</small></div>
+                            <div class="nutriments-aliment">{{ a.name }} - <small>Pour {{ a.per }}</small></div>
                             <table class="table table-striped">
                                 <tr ng-repeat="n in a.values" class="nutriments">
                                     <td>{{ n.o.name }}</td>

@@ -2,7 +2,7 @@
 
 var App = angular.module('App', ['ui.bootstrap', 'btford.phonegap.ready']);
 var API_URL = "http://localhost:9000/api";
-// API_URL = "http://192.168.1.55:9000/api";
+API_URL = "http://10.192.94.46:9000/api";
 
 // Show complete error messages in console
 window.onerror = function (errorMsg, url, lineNumber, columnNumber, errorObject) {
@@ -211,9 +211,9 @@ function translateName(n) {
         case "protein":
             return "Protéines";
         case "charbohydrate_total":
-            return "";
+            return "Glucides totaux";
         case "charbohydrate_available":
-            return "";
+            return "Glucides disponibles";
         case "fat_total":
             return "Lipides, totaux"; // ?
         case "alcohol":
