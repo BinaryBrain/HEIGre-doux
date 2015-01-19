@@ -26,6 +26,12 @@ public class MenuDownloader {
         });
     }
 
+    /**
+     * Downloads a menu in .docx format. Either the menu for "l'Orangeraie" or the menu for "la Palmeraie".
+     * @param  fileName    The path and filename in which to download the menu.
+     * @param  number      0 for "l'Orangeraie", 1 for "la Palmeraie"
+     * @throws IOException
+     */
     public void downloadDocx(String fileName, int number) throws IOException {
         byte[] buffer = new byte[1024];
         int read;
@@ -41,6 +47,11 @@ public class MenuDownloader {
         fos.close();
     }
 
+    /**
+    * Opens a connection to the given url using NTLM.
+    * @param  url         The url of the page to connect to.
+    * @throws IOException
+    */
     private void openConnection(String url) throws IOException {
         URL urlRequest = new URL(url);
         if (host == null) {
@@ -53,6 +64,11 @@ public class MenuDownloader {
         connection.setRequestMethod("GET");
     }
 
+    /**
+     * Helper method. Scrapes the webpage of the cafeteria and finds the menus urls.
+     * @return An array containing the found urls.
+     * @throws IOException
+     */
     private String[] getMenuUrls() throws IOException {
         openConnection(baseUrl);
 

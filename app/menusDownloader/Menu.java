@@ -6,14 +6,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Menu {
-    /*
-    private String entree;
-    private String viande;
-    private String sauce;
-    private String dessert;
-    private List<String> accompagnement = new ArrayList<>();
-    */
-
 
     private String provenance;
     private List<Aliment> aliments = new ArrayList<>();
@@ -33,6 +25,10 @@ public class Menu {
         }
     }
 
+    /**
+    * Helper method. Given a List<String>, finds the provenance (if exists) of the meat.
+    * @param lines A List<String> representing the menu.
+    */
     private void parseProvenance(List<String> lines) {
         String regex = "\\((.{1,3})\\)";
         Pattern pattern = Pattern.compile(regex);
@@ -53,6 +49,10 @@ public class Menu {
         }
     }
 
+    /**
+     * Helper method. Can be called to clean up the the remaining data once everything as been parsed.
+     * @param lines The remaining lines to be cleaned up.
+     */
     private void sanitize(List<String> lines) {
         String line;
         String regex = "\\(.*\\)";
@@ -68,6 +68,10 @@ public class Menu {
         }
     }
 
+    /**
+     * Helper method. Attempts to find the sauce of the menu given a List<String>.
+     * @param lines A List<String> representing the menu.
+     */
     private void parseSauce(List<String> lines) {
         if (lines.get(0).contains("«")) {
             String line = lines.remove(0);
@@ -76,6 +80,11 @@ public class Menu {
         }
     }
 
+    /**
+     * Converts the first character of a String to upper case.
+     * @param  str The String to convert
+     * @return     A String in lower case with the first character in upper case.
+     */
     private String capFirst(String str) {
         str = str.toLowerCase();
         return str.substring(0, 1).toUpperCase() + str.substring(1);
@@ -83,7 +92,7 @@ public class Menu {
 
     public String toString() {
         return "Menu: { aliments: " + aliments +
-                ", provenance: " + provenance + "}";
+               ", provenance: " + provenance + "}";
     }
 
     public List<Aliment> getAliments() {

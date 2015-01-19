@@ -17,6 +17,22 @@ public class MenuParser {
     private MenuParser() {
     }
 
+    /**
+     * Given the path to a .docx, returns a list containing the menus.
+     *
+     * The returned list is in the following format:
+     * ||menu 1 lundi|, |menu 2 lundi||
+     * ||menu 1 mardi|, |menu 2 mardi||
+     *                .
+     *                .
+     *                .
+     * ||menu 1 vend.|, |menu 2 vend.||
+     *
+     * @param  fileName               The path to the .docx corresponding menu
+     * @return                        A list containing all menus.
+     * @throws IOException
+     * @throws InvalidFormatException
+     */
     public static List<List<Menu>> parseMenusDocx(String fileName) throws IOException, InvalidFormatException {
         FileInputStream fis = new FileInputStream(fileName);
         XWPFDocument document = new XWPFDocument(OPCPackage.open(fis));
