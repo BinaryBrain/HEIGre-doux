@@ -67,6 +67,7 @@ object Application extends Controller {
           // menuDL.downloadDocx(menusDir + "/menu1.docx", 1) // Palmeraie
         } catch {
           case e: Exception => println("Error while downloading menus")
+            e.printStackTrace
         }
 
         val menus = MenuParser.parseMenusDocx(file)
